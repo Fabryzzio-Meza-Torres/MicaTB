@@ -1,0 +1,5 @@
+,gray,gray,gray,lab_a,lab_a,lab_a,lab_b,lab_b,lab_b,blur,blur,blur
+,mean,std,median,mean,std,median,mean,std,median,mean,std,median
+pattern,,,,,,,,,,,,
+crop,191.09,30.56,194.67,145.09,13.06,143.89,139.3,16.28,134.58,38.42,28.02,29.74
+simple,182.7,30.75,188.62,144.85,15.14,141.31,133.85,13.49,129.34,34.81,33.63,26.25

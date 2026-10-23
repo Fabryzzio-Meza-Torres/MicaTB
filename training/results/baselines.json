@@ -1,0 +1,18 @@
+{
+ "mediana_estricta_Gb": {
+  "mediana_train": 1.0,
+  "mae_val": 0.7335600907029478
+ },
+ "mediana_amplia_Gb+Gpb": {
+  "mediana_train": 1.0,
+  "mae_val": 0.7709750566893424
+ },
+ "umbral_Lab": {
+  "delta_a": 20,
+  "area_min": 300,
+  "mae_train": 3.330487804878049,
+  "mae_val_estricta": 3.0759637188208617,
+  "mae_val_amplia": 2.993197278911565,
+  "seg": 171
+ }
+}

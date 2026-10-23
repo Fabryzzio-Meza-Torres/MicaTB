@@ -1,0 +1,1072 @@
+{
+ "config": "app_config.json",
+ "modelo": "ecoli_gb_E3s43_352_fp16.tflite",
+ "verificacion_vs_ultralytics_300": {
+  "imagenes": 300,
+  "conteo_igual_a_ultralytics": 300,
+  "max_dif_caja_px": 0.04997558593748863,
+  "mediana_dif_caja_px": 0.04334106445312358
+ },
+ "casos": [
+  {
+   "imagen": "902586.jpg",
+   "patron": "simple",
+   "gt_G_bacilli": 0,
+   "gt_cajas_G_bacilli": [],
+   "esperado_script_estricta": 0,
+   "esperado_script_amplia": 0,
+   "detecciones_estricta": []
+  },
+  {
+   "imagen": "900077.jpg",
+   "patron": "simple",
+   "gt_G_bacilli": 0,
+   "gt_cajas_G_bacilli": [],
+   "esperado_script_estricta": 0,
+   "esperado_script_amplia": 0,
+   "detecciones_estricta": []
+  },
+  {
+   "imagen": "902364.jpg",
+   "patron": "simple",
+   "gt_G_bacilli": 0,
+   "gt_cajas_G_bacilli": [],
+   "esperado_script_estricta": 0,
+   "esperado_script_amplia": 1,
+   "detecciones_estricta": []
+  },
+  {
+   "imagen": "901247.jpg",
+   "patron": "simple",
+   "gt_G_bacilli": 0,
+   "gt_cajas_G_bacilli": [],
+   "esperado_script_estricta": 0,
+   "esperado_script_amplia": 1,
+   "detecciones_estricta": []
+  },
+  {
+   "imagen": "901021.jpg",
+   "patron": "simple",
+   "gt_G_bacilli": 1,
+   "gt_cajas_G_bacilli": [
+    [
+     127.0,
+     124.0,
+     189.0,
+     195.0
+    ]
+   ],
+   "esperado_script_estricta": 0,
+   "esperado_script_amplia": 1,
+   "detecciones_estricta": []
+  },
+  {
+   "imagen": "000087_3_5.jpg",
+   "patron": "crop",
+   "gt_G_bacilli": 1,
+   "gt_cajas_G_bacilli": [
+    [
+     90.0,
+     449.0,
+     147.0,
+     520.0
+    ]
+   ],
+   "esperado_script_estricta": 1,
+   "esperado_script_amplia": 1,
+   "detecciones_estricta": [
+    {
+     "clase": "G-bacilli",
+     "conf": 0.8591,
+     "caja": [
+      91.3,
+      442.4,
+      147.2,
+      523.1
+     ]
+    }
+   ]
+  },
+  {
+   "imagen": "901647.jpg",
+   "patron": "simple",
+   "gt_G_bacilli": 1,
+   "gt_cajas_G_bacilli": [
+    [
+     494.0,
+     361.0,
+     536.0,
+     409.0
+    ]
+   ],
+   "esperado_script_estricta": 1,
+   "esperado_script_amplia": 1,
+   "detecciones_estricta": [
+    {
+     "clase": "G-bacilli",
+     "conf": 0.6865,
+     "caja": [
+      494.6,
+      358.3,
+      538.9,
+      402.9
+     ]
+    }
+   ]
+  },
+  {
+   "imagen": "000231_0_5.jpg",
+   "patron": "crop",
+   "gt_G_bacilli": 1,
+   "gt_cajas_G_bacilli": [
+    [
+     381.0,
+     543.0,
+     459.0,
+     612.0
+    ]
+   ],
+   "esperado_script_estricta": 1,
+   "esperado_script_amplia": 1,
+   "detecciones_estricta": [
+    {
+     "clase": "G-bacilli",
+     "conf": 0.8555,
+     "caja": [
+      384.9,
+      545.6,
+      457.1,
+      613.1
+     ]
+    }
+   ]
+  },
+  {
+   "imagen": "000232_4_1.jpg",
+   "patron": "crop",
+   "gt_G_bacilli": 1,
+   "gt_cajas_G_bacilli": [
+    [
+     437.0,
+     312.0,
+     516.0,
+     401.0
+    ]
+   ],
+   "esperado_script_estricta": 1,
+   "esperado_script_amplia": 1,
+   "detecciones_estricta": [
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7912,
+     "caja": [
+      447.6,
+      320.6,
+      511.6,
+      396.4
+     ]
+    }
+   ]
+  },
+  {
+   "imagen": "000206_1_3.jpg",
+   "patron": "crop",
+   "gt_G_bacilli": 1,
+   "gt_cajas_G_bacilli": [
+    [
+     229.0,
+     10.0,
+     271.0,
+     62.0
+    ]
+   ],
+   "esperado_script_estricta": 1,
+   "esperado_script_amplia": 1,
+   "detecciones_estricta": [
+    {
+     "clase": "G-bacilli",
+     "conf": 0.6319,
+     "caja": [
+      224.2,
+      9.6,
+      272.1,
+      70.9
+     ]
+    }
+   ]
+  },
+  {
+   "imagen": "000163_4_4.jpg",
+   "patron": "crop",
+   "gt_G_bacilli": 2,
+   "gt_cajas_G_bacilli": [
+    [
+     30.0,
+     122.0,
+     84.0,
+     169.0
+    ],
+    [
+     248.0,
+     194.0,
+     310.0,
+     241.0
+    ]
+   ],
+   "esperado_script_estricta": 2,
+   "esperado_script_amplia": 2,
+   "detecciones_estricta": [
+    {
+     "clase": "G-bacilli",
+     "conf": 0.8353,
+     "caja": [
+      250.1,
+      196.9,
+      307.5,
+      240.3
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7455,
+     "caja": [
+      31.3,
+      123.8,
+      84.3,
+      168.8
+     ]
+    }
+   ]
+  },
+  {
+   "imagen": "000186_2_6.jpg",
+   "patron": "crop",
+   "gt_G_bacilli": 2,
+   "gt_cajas_G_bacilli": [
+    [
+     172.0,
+     104.0,
+     265.0,
+     171.0
+    ],
+    [
+     124.0,
+     245.0,
+     215.0,
+     300.0
+    ]
+   ],
+   "esperado_script_estricta": 2,
+   "esperado_script_amplia": 2,
+   "detecciones_estricta": [
+    {
+     "clase": "G-bacilli",
+     "conf": 0.8445,
+     "caja": [
+      175.4,
+      110.2,
+      257.0,
+      167.7
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.8445,
+     "caja": [
+      123.3,
+      245.4,
+      214.6,
+      300.5
+     ]
+    }
+   ]
+  },
+  {
+   "imagen": "000130_6_5.jpg",
+   "patron": "crop",
+   "gt_G_bacilli": 2,
+   "gt_cajas_G_bacilli": [
+    [
+     150.0,
+     193.0,
+     198.0,
+     243.0
+    ],
+    [
+     522.0,
+     196.0,
+     573.0,
+     245.0
+    ]
+   ],
+   "esperado_script_estricta": 2,
+   "esperado_script_amplia": 2,
+   "detecciones_estricta": [
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7387,
+     "caja": [
+      523.3,
+      200.3,
+      572.5,
+      247.7
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7148,
+     "caja": [
+      151.6,
+      183.0,
+      195.2,
+      240.8
+     ]
+    }
+   ]
+  },
+  {
+   "imagen": "900335.jpg",
+   "patron": "simple",
+   "gt_G_bacilli": 3,
+   "gt_cajas_G_bacilli": [
+    [
+     413.0,
+     221.0,
+     475.0,
+     268.0
+    ],
+    [
+     485.0,
+     584.0,
+     563.0,
+     636.0
+    ],
+    [
+     413.0,
+     285.0,
+     459.0,
+     348.0
+    ]
+   ],
+   "esperado_script_estricta": 3,
+   "esperado_script_amplia": 3,
+   "detecciones_estricta": [
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7662,
+     "caja": [
+      410.1,
+      288.8,
+      459.0,
+      345.9
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.6886,
+     "caja": [
+      409.9,
+      220.6,
+      474.6,
+      267.3
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.6821,
+     "caja": [
+      489.1,
+      591.5,
+      558.7,
+      635.6
+     ]
+    }
+   ]
+  },
+  {
+   "imagen": "000245_4_3.jpg",
+   "patron": "crop",
+   "gt_G_bacilli": 2,
+   "gt_cajas_G_bacilli": [
+    [
+     345.0,
+     203.0,
+     408.0,
+     253.0
+    ],
+    [
+     224.0,
+     490.0,
+     281.0,
+     541.0
+    ]
+   ],
+   "esperado_script_estricta": 1,
+   "esperado_script_amplia": 2,
+   "detecciones_estricta": [
+    {
+     "clase": "G-bacilli",
+     "conf": 0.8026,
+     "caja": [
+      345.4,
+      202.2,
+      408.1,
+      253.5
+     ]
+    }
+   ]
+  },
+  {
+   "imagen": "000280_4_1.jpg",
+   "patron": "crop",
+   "gt_G_bacilli": 4,
+   "gt_cajas_G_bacilli": [
+    [
+     160.0,
+     452.0,
+     233.0,
+     513.0
+    ],
+    [
+     241.0,
+     335.0,
+     304.0,
+     394.0
+    ],
+    [
+     381.0,
+     92.0,
+     422.0,
+     141.0
+    ],
+    [
+     326.0,
+     106.0,
+     366.0,
+     192.0
+    ]
+   ],
+   "esperado_script_estricta": 3,
+   "esperado_script_amplia": 5,
+   "detecciones_estricta": [
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7643,
+     "caja": [
+      241.5,
+      334.2,
+      304.8,
+      393.5
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7602,
+     "caja": [
+      323.0,
+      105.2,
+      373.3,
+      198.6
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.6997,
+     "caja": [
+      380.1,
+      91.4,
+      423.8,
+      141.7
+     ]
+    }
+   ]
+  },
+  {
+   "imagen": "000343_0_7.jpg",
+   "patron": "crop",
+   "gt_G_bacilli": 5,
+   "gt_cajas_G_bacilli": [
+    [
+     434.0,
+     192.0,
+     479.0,
+     243.0
+    ],
+    [
+     334.0,
+     501.0,
+     382.0,
+     556.0
+    ],
+    [
+     351.0,
+     392.0,
+     399.0,
+     441.0
+    ],
+    [
+     208.0,
+     277.0,
+     286.0,
+     341.0
+    ],
+    [
+     80.0,
+     477.0,
+     129.0,
+     534.0
+    ]
+   ],
+   "esperado_script_estricta": 5,
+   "esperado_script_amplia": 5,
+   "detecciones_estricta": [
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7933,
+     "caja": [
+      211.2,
+      276.9,
+      285.2,
+      338.2
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7761,
+     "caja": [
+      248.6,
+      403.4,
+      312.2,
+      445.9
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7362,
+     "caja": [
+      433.0,
+      191.7,
+      483.0,
+      244.1
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.6892,
+     "caja": [
+      336.8,
+      502.3,
+      379.1,
+      552.1
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.4987,
+     "caja": [
+      350.6,
+      395.3,
+      398.6,
+      441.6
+     ]
+    }
+   ]
+  },
+  {
+   "imagen": "901699.jpg",
+   "patron": "simple",
+   "gt_G_bacilli": 17,
+   "gt_cajas_G_bacilli": [
+    [
+     11.0,
+     491.0,
+     59.0,
+     555.0
+    ],
+    [
+     126.0,
+     373.0,
+     180.0,
+     428.0
+    ],
+    [
+     32.0,
+     146.0,
+     97.0,
+     198.0
+    ],
+    [
+     556.0,
+     236.0,
+     621.0,
+     273.0
+    ],
+    [
+     140.0,
+     73.0,
+     204.0,
+     128.0
+    ],
+    [
+     386.0,
+     443.0,
+     429.0,
+     537.0
+    ],
+    [
+     247.0,
+     29.0,
+     297.0,
+     94.0
+    ],
+    [
+     574.0,
+     463.0,
+     634.0,
+     518.0
+    ],
+    [
+     13.0,
+     312.0,
+     74.0,
+     367.0
+    ],
+    [
+     442.0,
+     484.0,
+     506.0,
+     563.0
+    ],
+    [
+     541.0,
+     425.0,
+     608.0,
+     471.0
+    ],
+    [
+     204.0,
+     434.0,
+     279.0,
+     478.0
+    ],
+    [
+     41.0,
+     414.0,
+     81.0,
+     517.0
+    ],
+    [
+     176.0,
+     370.0,
+     225.0,
+     423.0
+    ],
+    [
+     143.0,
+     457.0,
+     187.0,
+     517.0
+    ],
+    [
+     247.0,
+     210.0,
+     357.0,
+     273.0
+    ],
+    [
+     5.0,
+     228.0,
+     43.0,
+     295.0
+    ]
+   ],
+   "esperado_script_estricta": 16,
+   "esperado_script_amplia": 16,
+   "detecciones_estricta": [
+    {
+     "clase": "G-bacilli",
+     "conf": 0.8833,
+     "caja": [
+      255.8,
+      222.4,
+      353.6,
+      272.1
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7903,
+     "caja": [
+      446.0,
+      496.0,
+      501.8,
+      553.6
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7902,
+     "caja": [
+      42.4,
+      420.0,
+      91.1,
+      514.1
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7834,
+     "caja": [
+      249.0,
+      32.6,
+      294.8,
+      95.1
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7785,
+     "caja": [
+      17.9,
+      315.5,
+      67.5,
+      365.2
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7589,
+     "caja": [
+      13.0,
+      489.7,
+      56.3,
+      551.4
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7588,
+     "caja": [
+      543.0,
+      428.2,
+      606.2,
+      467.4
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7531,
+     "caja": [
+      147.0,
+      462.8,
+      185.7,
+      521.2
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7298,
+     "caja": [
+      386.7,
+      455.8,
+      429.1,
+      538.0
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7236,
+     "caja": [
+      557.9,
+      235.0,
+      615.8,
+      273.7
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7213,
+     "caja": [
+      207.7,
+      441.9,
+      271.6,
+      479.7
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7168,
+     "caja": [
+      140.9,
+      80.8,
+      209.6,
+      126.3
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.6962,
+     "caja": [
+      41.3,
+      153.3,
+      93.7,
+      197.3
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.6953,
+     "caja": [
+      3.8,
+      239.5,
+      44.7,
+      297.6
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.6793,
+     "caja": [
+      578.5,
+      469.9,
+      626.4,
+      511.4
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.5728,
+     "caja": [
+      114.9,
+      372.9,
+      222.3,
+      422.5
+     ]
+    }
+   ]
+  },
+  {
+   "imagen": "900273.jpg",
+   "patron": "simple",
+   "gt_G_bacilli": 5,
+   "gt_cajas_G_bacilli": [
+    [
+     548.0,
+     171.0,
+     612.0,
+     211.0
+    ],
+    [
+     262.0,
+     522.0,
+     301.0,
+     585.0
+    ],
+    [
+     328.0,
+     382.0,
+     386.0,
+     436.0
+    ],
+    [
+     52.0,
+     78.0,
+     98.0,
+     141.0
+    ],
+    [
+     79.0,
+     552.0,
+     150.0,
+     638.0
+    ]
+   ],
+   "esperado_script_estricta": 5,
+   "esperado_script_amplia": 5,
+   "detecciones_estricta": [
+    {
+     "clase": "G-bacilli",
+     "conf": 0.8208,
+     "caja": [
+      326.6,
+      383.9,
+      386.6,
+      433.0
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7697,
+     "caja": [
+      56.6,
+      81.6,
+      99.6,
+      146.2
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7555,
+     "caja": [
+      549.3,
+      173.6,
+      611.4,
+      212.0
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7377,
+     "caja": [
+      265.9,
+      525.3,
+      300.7,
+      583.1
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7075,
+     "caja": [
+      87.2,
+      555.4,
+      152.8,
+      639.0
+     ]
+    }
+   ]
+  },
+  {
+   "imagen": "000358_3_3.jpg",
+   "patron": "crop",
+   "gt_G_bacilli": 4,
+   "gt_cajas_G_bacilli": [
+    [
+     575.0,
+     546.0,
+     622.0,
+     605.0
+    ],
+    [
+     328.0,
+     207.0,
+     375.0,
+     262.0
+    ],
+    [
+     403.0,
+     142.0,
+     451.0,
+     206.0
+    ],
+    [
+     200.0,
+     300.0,
+     252.0,
+     368.0
+    ]
+   ],
+   "esperado_script_estricta": 4,
+   "esperado_script_amplia": 4,
+   "detecciones_estricta": [
+    {
+     "clase": "G-bacilli",
+     "conf": 0.8398,
+     "caja": [
+      407.1,
+      146.2,
+      447.2,
+      202.3
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.8203,
+     "caja": [
+      203.8,
+      300.3,
+      251.6,
+      364.4
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7954,
+     "caja": [
+      324.0,
+      205.7,
+      368.9,
+      257.9
+     ]
+    },
+    {
+     "clase": "G-bacilli",
+     "conf": 0.6855,
+     "caja": [
+      577.3,
+      549.0,
+      620.6,
+      601.5
+     ]
+    }
+   ]
+  }
+ ],
+ "no_cuadradas": [
+  {
+   "imagen": "nocuadrada_0_901021.jpg",
+   "forma": [
+    480,
+    640
+   ],
+   "conteo_recorte": 0,
+   "cajas_en_imagen_completa_dentro_del_recorte": 0,
+   "cajas_del_recorte_con_IoU_mayor_0_7_con_la_completa": 0,
+   "detecciones_recorte": [
+    {
+     "clase": "G+bacilli",
+     "conf": 0.5765,
+     "caja": [
+      329.8,
+      61.7,
+      384.9,
+      103.4
+     ]
+    }
+   ]
+  },
+  {
+   "imagen": "nocuadrada_1_000087_3_5.jpg",
+   "forma": [
+    640,
+    400
+   ],
+   "conteo_recorte": 1,
+   "cajas_en_imagen_completa_dentro_del_recorte": 0,
+   "cajas_del_recorte_con_IoU_mayor_0_7_con_la_completa": 0,
+   "detecciones_recorte": [
+    {
+     "clase": "G-bacilli",
+     "conf": 0.7705,
+     "caja": [
+      3.9,
+      443.5,
+      47.3,
+      521.8
+     ]
+    }
+   ]
+  },
+  {
+   "imagen": "nocuadrada_2_901647.jpg",
+   "forma": [
+    240,
+    580
+   ],
+   "conteo_recorte": 0,
+   "cajas_en_imagen_completa_dentro_del_recorte": 0,
+   "cajas_del_recorte_con_IoU_mayor_0_7_con_la_completa": 0,
+   "detecciones_recorte": []
+  }
+ ]
+}

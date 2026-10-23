@@ -1,0 +1,5 @@
+cls,train,val,test
+G+bacilli,827,189,160
+G+cocci,945,179,227
+G-bacilli,4012,909,844
+G-cocci,2261,526,496

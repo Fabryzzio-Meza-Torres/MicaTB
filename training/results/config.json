@@ -1,0 +1,60 @@
+{
+ "modelo": "yolov8n",
+ "pesos_pt": "modelos/ecoli_gb_E3s43_352.pt",
+ "semilla": 43,
+ "ruta_inferencia": "PAD352: letterbox a 320 + 16 px de borde gris 114 por lado = entrada 352x352",
+ "clases": [
+  "G-cocci",
+  "G+cocci",
+  "G-bacilli",
+  "G+bacilli"
+ ],
+ "clase_objetivo": "G-bacilli",
+ "conteo_recomendado": "estricta (solo G-bacilli)",
+ "umbrales_congelados_en_val": {
+  "estricta": {
+   "conf": 0.45,
+   "iou_nms": 0.5
+  },
+  "amplia_G-_mas_G+_bacilli": {
+   "conf": 0.4,
+   "iou_nms": 0.5
+  }
+ },
+ "max_det": 1000,
+ "entrenamiento": {
+  "imgsz": 320,
+  "epochs": 100,
+  "patience": 25,
+  "batch": 16,
+  "flipud": 0.5,
+  "fliplr": 0.5,
+  "degrees": 0,
+  "hsv": "por defecto",
+  "optimizer": "auto (AdamW)",
+  "semillas": [
+   42,
+   43,
+   44
+  ]
+ },
+ "split_manifest_sha256": "b7bd3cfd9703f690d60b64ddf0fb188dc6be4201c60f198e702099c00a69c507",
+ "sha256_pesos": {
+  "ecoli_gb_E3s43_352_fp16.tflite": "08538648bcb79f2f75c7948c5dfaa2266c87016b5dfe9517034f824ed8f980b3",
+  "ecoli_gb_E3s43_352.tflite": "5e597b0001542e2ada88eaf5a92e5cbe8b9f2913606c97704d93f39b0c8b4f77",
+  "ecoli_gb_E3s43_352.onnx": "4ef364da9c6608e7e04e7ee6790556fc4bfa2fd0c832e2ac4c4c32f170a67932",
+  "ecoli_gb_E3s43_352.pt": "c1f9732de4b86db00e21024620743d94512a8842aa80d5b00622d99d43c72730",
+  "ecoli_gb_E3s43_352_int8.tflite": "da776aab222f7603590a1c2a1af78d7944ae0e543a426992e723ccc02d047234",
+  "ecoli_gb_E3s43_352_fp32.tflite": "5e597b0001542e2ada88eaf5a92e5cbe8b9f2913606c97704d93f39b0c8b4f77"
+ },
+ "versiones": {
+  "ultralytics": "8.4.182",
+  "torch": "2.11.0",
+  "tensorflow": "2.20.0",
+  "ai-edge-litert": "2.2.0",
+  "onnx": "1.22.0",
+  "numpy": "2.1.3",
+  "python": "3.13"
+ },
+ "config_app": "app_config.json"
+}

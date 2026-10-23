@@ -1,0 +1,633 @@
+{
+ "resumen": {
+  "n": 60,
+  "con_deteccion_en_recorte": 53,
+  "iou_mayor_0_7": 53,
+  "iou_mediana": 0.9331118953305311,
+  "error_centro_mediano_px": 0.7382411530116598,
+  "formas": [
+   [
+    480,
+    360
+   ],
+   [
+    300,
+    450
+   ],
+   [
+    560,
+    240
+   ],
+   [
+    400,
+    400
+   ],
+   [
+    640,
+    200
+   ]
+  ]
+ },
+ "casos": [
+  {
+   "imagen": "902778.jpg",
+   "recorte": [
+    480,
+    360
+   ],
+   "iou": 0.8753177344717457,
+   "error_centro_px": 0.36400549446401886,
+   "detectada": true
+  },
+  {
+   "imagen": "000158_1_1.jpg",
+   "recorte": [
+    300,
+    450
+   ],
+   "iou": 0.9469173735889385,
+   "error_centro_px": 1.1768602295939936,
+   "detectada": true
+  },
+  {
+   "imagen": "902883.jpg",
+   "recorte": [
+    560,
+    240
+   ],
+   "iou": 0.8580265959675609,
+   "error_centro_px": 0.05000000000001137,
+   "detectada": true
+  },
+  {
+   "imagen": "000230_2_4.jpg",
+   "recorte": [
+    400,
+    400
+   ],
+   "iou": 0.0,
+   "error_centro_px": null,
+   "detectada": false
+  },
+  {
+   "imagen": "901699.jpg",
+   "recorte": [
+    640,
+    200
+   ],
+   "iou": 0.9252846009568623,
+   "error_centro_px": 2.040833163195798,
+   "detectada": true
+  },
+  {
+   "imagen": "000187_4_0.jpg",
+   "recorte": [
+    480,
+    360
+   ],
+   "iou": 0.9698237737445949,
+   "error_centro_px": 0.8321658488546702,
+   "detectada": true
+  },
+  {
+   "imagen": "000344_4_4.jpg",
+   "recorte": [
+    300,
+    450
+   ],
+   "iou": 0.8918572924883299,
+   "error_centro_px": 1.0700467279516521,
+   "detectada": true
+  },
+  {
+   "imagen": "000344_0_3.jpg",
+   "recorte": [
+    560,
+    240
+   ],
+   "iou": 0.9223654566090147,
+   "error_centro_px": 0.1802775637732168,
+   "detectada": true
+  },
+  {
+   "imagen": "902534.jpg",
+   "recorte": [
+    400,
+    400
+   ],
+   "iou": 0.9262185907644929,
+   "error_centro_px": 1.3647344063956108,
+   "detectada": true
+  },
+  {
+   "imagen": "000228_0_6.jpg",
+   "recorte": [
+    640,
+    200
+   ],
+   "iou": 0.9325854517682641,
+   "error_centro_px": 0.7615773105863848,
+   "detectada": true
+  },
+  {
+   "imagen": "901890.jpg",
+   "recorte": [
+    480,
+    360
+   ],
+   "iou": 0.9579369498035223,
+   "error_centro_px": 0.7382411530116598,
+   "detectada": true
+  },
+  {
+   "imagen": "000228_2_8.jpg",
+   "recorte": [
+    300,
+    450
+   ],
+   "iou": 0.9687252735539258,
+   "error_centro_px": 0.5700877125495815,
+   "detectada": true
+  },
+  {
+   "imagen": "900373.jpg",
+   "recorte": [
+    560,
+    240
+   ],
+   "iou": 0.9350273872852689,
+   "error_centro_px": 1.2103718436910205,
+   "detectada": true
+  },
+  {
+   "imagen": "000280_3_5.jpg",
+   "recorte": [
+    400,
+    400
+   ],
+   "iou": 0.9065487944294326,
+   "error_centro_px": 0.7158910531638355,
+   "detectada": true
+  },
+  {
+   "imagen": "000235_0_8.jpg",
+   "recorte": [
+    640,
+    200
+   ],
+   "iou": 0.9289915966386553,
+   "error_centro_px": 0.7158910531638355,
+   "detectada": true
+  },
+  {
+   "imagen": "900935.jpg",
+   "recorte": [
+    480,
+    360
+   ],
+   "iou": 0.9556344810980018,
+   "error_centro_px": 0.4924428900898162,
+   "detectada": true
+  },
+  {
+   "imagen": "000122_4_1.jpg",
+   "recorte": [
+    300,
+    450
+   ],
+   "iou": 0.9738178023339175,
+   "error_centro_px": 0.3201562118716442,
+   "detectada": true
+  },
+  {
+   "imagen": "000163_1_1.jpg",
+   "recorte": [
+    560,
+    240
+   ],
+   "iou": 0.9559227814070418,
+   "error_centro_px": 0.9219544457292687,
+   "detectada": true
+  },
+  {
+   "imagen": "000358_4_5.jpg",
+   "recorte": [
+    400,
+    400
+   ],
+   "iou": 0.9461909315483304,
+   "error_centro_px": 1.3647344063956248,
+   "detectada": true
+  },
+  {
+   "imagen": "901156.jpg",
+   "recorte": [
+    640,
+    200
+   ],
+   "iou": 0.9406082093825786,
+   "error_centro_px": 0.6800735254367847,
+   "detectada": true
+  },
+  {
+   "imagen": "900822.jpg",
+   "recorte": [
+    480,
+    360
+   ],
+   "iou": 0.9618865731130114,
+   "error_centro_px": 0.6670832032062894,
+   "detectada": true
+  },
+  {
+   "imagen": "000245_4_2.jpg",
+   "recorte": [
+    300,
+    450
+   ],
+   "iou": 0.9336383388927979,
+   "error_centro_px": 0.790569415042093,
+   "detectada": true
+  },
+  {
+   "imagen": "000174_1_6.jpg",
+   "recorte": [
+    560,
+    240
+   ],
+   "iou": 0.9200711681446933,
+   "error_centro_px": 0.14142135623734164,
+   "detectada": true
+  },
+  {
+   "imagen": "000358_1_0.jpg",
+   "recorte": [
+    400,
+    400
+   ],
+   "iou": 0.9503725822028863,
+   "error_centro_px": 1.38293166859393,
+   "detectada": true
+  },
+  {
+   "imagen": "000264_4_5.jpg",
+   "recorte": [
+    640,
+    200
+   ],
+   "iou": 0.917978143377538,
+   "error_centro_px": 0.4301162633521548,
+   "detectada": true
+  },
+  {
+   "imagen": "000158_4_4.jpg",
+   "recorte": [
+    480,
+    360
+   ],
+   "iou": 0.9449096984308255,
+   "error_centro_px": 0.5315072906367116,
+   "detectada": true
+  },
+  {
+   "imagen": "000004_2_0.jpg",
+   "recorte": [
+    300,
+    450
+   ],
+   "iou": 0.9245765809674669,
+   "error_centro_px": 0.799999999999983,
+   "detectada": true
+  },
+  {
+   "imagen": "000228_2_7.jpg",
+   "recorte": [
+    560,
+    240
+   ],
+   "iou": 0.9614334745421996,
+   "error_centro_px": 1.0770329614269134,
+   "detectada": true
+  },
+  {
+   "imagen": "000258_6_4.jpg",
+   "recorte": [
+    400,
+    400
+   ],
+   "iou": 0.9146225368932869,
+   "error_centro_px": 0.5000000000000284,
+   "detectada": true
+  },
+  {
+   "imagen": "902715.jpg",
+   "recorte": [
+    640,
+    200
+   ],
+   "iou": 0.0,
+   "error_centro_px": null,
+   "detectada": false
+  },
+  {
+   "imagen": "000359_3_2.jpg",
+   "recorte": [
+    480,
+    360
+   ],
+   "iou": 0.0,
+   "error_centro_px": null,
+   "detectada": false
+  },
+  {
+   "imagen": "900313.jpg",
+   "recorte": [
+    300,
+    450
+   ],
+   "iou": 0.7384693618103229,
+   "error_centro_px": 1.7670597047072103,
+   "detectada": true
+  },
+  {
+   "imagen": "000278_1_5.jpg",
+   "recorte": [
+    560,
+    240
+   ],
+   "iou": 0.0,
+   "error_centro_px": null,
+   "detectada": false
+  },
+  {
+   "imagen": "000158_4_0.jpg",
+   "recorte": [
+    400,
+    400
+   ],
+   "iou": 0.8812822368319759,
+   "error_centro_px": 2.1523243250030664,
+   "detectada": true
+  },
+  {
+   "imagen": "900556.jpg",
+   "recorte": [
+    640,
+    200
+   ],
+   "iou": 0.9494025374996572,
+   "error_centro_px": 0.15811388300844145,
+   "detectada": true
+  },
+  {
+   "imagen": "000245_4_5.jpg",
+   "recorte": [
+    480,
+    360
+   ],
+   "iou": 0.9501444238311063,
+   "error_centro_px": 0.9192388155425044,
+   "detectada": true
+  },
+  {
+   "imagen": "000358_2_3.jpg",
+   "recorte": [
+    300,
+    450
+   ],
+   "iou": 0.9413593113295049,
+   "error_centro_px": 0.9656603957913883,
+   "detectada": true
+  },
+  {
+   "imagen": "000261_3_4.jpg",
+   "recorte": [
+    560,
+    240
+   ],
+   "iou": 0.9680753647588788,
+   "error_centro_px": 0.6363961030678867,
+   "detectada": true
+  },
+  {
+   "imagen": "000163_4_4.jpg",
+   "recorte": [
+    400,
+    400
+   ],
+   "iou": 0.9386854086692582,
+   "error_centro_px": 1.0965856099730689,
+   "detectada": true
+  },
+  {
+   "imagen": "000358_4_0.jpg",
+   "recorte": [
+    640,
+    200
+   ],
+   "iou": 0.9231800766283528,
+   "error_centro_px": 0.6576473218983,
+   "detectada": true
+  },
+  {
+   "imagen": "901363.jpg",
+   "recorte": [
+    480,
+    360
+   ],
+   "iou": 0.9285706814497148,
+   "error_centro_px": 0.8602325267042765,
+   "detectada": true
+  },
+  {
+   "imagen": "000344_2_1.jpg",
+   "recorte": [
+    300,
+    450
+   ],
+   "iou": 0.9175518120109151,
+   "error_centro_px": 0.6041522986797143,
+   "detectada": true
+  },
+  {
+   "imagen": "000331_4_5.jpg",
+   "recorte": [
+    560,
+    240
+   ],
+   "iou": 0.8699747020634577,
+   "error_centro_px": 2.238861317723818,
+   "detectada": true
+  },
+  {
+   "imagen": "000206_4_2.jpg",
+   "recorte": [
+    400,
+    400
+   ],
+   "iou": 0.9792771611351083,
+   "error_centro_px": 0.42720018726588055,
+   "detectada": true
+  },
+  {
+   "imagen": "900356.jpg",
+   "recorte": [
+    640,
+    200
+   ],
+   "iou": 0.9653534852989759,
+   "error_centro_px": 0.7158910531638146,
+   "detectada": true
+  },
+  {
+   "imagen": "000163_5_8.jpg",
+   "recorte": [
+    480,
+    360
+   ],
+   "iou": 0.990568330983519,
+   "error_centro_px": 0.1802775637731853,
+   "detectada": true
+  },
+  {
+   "imagen": "000115_2_3.jpg",
+   "recorte": [
+    300,
+    450
+   ],
+   "iou": 0.9456627543589587,
+   "error_centro_px": 1.2010412149464198,
+   "detectada": true
+  },
+  {
+   "imagen": "000292_1_4.jpg",
+   "recorte": [
+    560,
+    240
+   ],
+   "iou": 0.0,
+   "error_centro_px": null,
+   "detectada": false
+  },
+  {
+   "imagen": "900764.jpg",
+   "recorte": [
+    400,
+    400
+   ],
+   "iou": 0.9245702531214798,
+   "error_centro_px": 1.431782106327671,
+   "detectada": true
+  },
+  {
+   "imagen": "000187_2_2.jpg",
+   "recorte": [
+    640,
+    200
+   ],
+   "iou": 0.954764981389978,
+   "error_centro_px": 1.0012492197250682,
+   "detectada": true
+  },
+  {
+   "imagen": "000343_4_0.jpg",
+   "recorte": [
+    480,
+    360
+   ],
+   "iou": 0.9593421981331826,
+   "error_centro_px": 0.4123105625617633,
+   "detectada": true
+  },
+  {
+   "imagen": "000365_0_4.jpg",
+   "recorte": [
+    300,
+    450
+   ],
+   "iou": 0.9583901426371124,
+   "error_centro_px": 0.6082762530298295,
+   "detectada": true
+  },
+  {
+   "imagen": "000221_5_3.jpg",
+   "recorte": [
+    560,
+    240
+   ],
+   "iou": 0.9174798061389343,
+   "error_centro_px": 0.5590169943749524,
+   "detectada": true
+  },
+  {
+   "imagen": "900543.jpg",
+   "recorte": [
+    400,
+    400
+   ],
+   "iou": 0.9669968582161964,
+   "error_centro_px": 0.7648529270389133,
+   "detectada": true
+  },
+  {
+   "imagen": "000344_3_3.jpg",
+   "recorte": [
+    640,
+    200
+   ],
+   "iou": 0.9296690307328608,
+   "error_centro_px": 0.6103277807866656,
+   "detectada": true
+  },
+  {
+   "imagen": "000358_3_5.jpg",
+   "recorte": [
+    480,
+    360
+   ],
+   "iou": 0.9496228415447037,
+   "error_centro_px": 1.1045361017187507,
+   "detectada": true
+  },
+  {
+   "imagen": "000158_6_7.jpg",
+   "recorte": [
+    300,
+    450
+   ],
+   "iou": 0.0,
+   "error_centro_px": null,
+   "detectada": false
+  },
+  {
+   "imagen": "900329.jpg",
+   "recorte": [
+    560,
+    240
+   ],
+   "iou": 0.9273208529664098,
+   "error_centro_px": 1.1011357772772852,
+   "detectada": true
+  },
+  {
+   "imagen": "000341_2_6.jpg",
+   "recorte": [
+    400,
+    400
+   ],
+   "iou": 0.0,
+   "error_centro_px": null,
+   "detectada": false
+  },
+  {
+   "imagen": "000358_3_1.jpg",
+   "recorte": [
+    640,
+    200
+   ],
+   "iou": 0.9700080760252681,
+   "error_centro_px": 0.4031128874148887,
+   "detectada": true
+  }
+ ]
+}

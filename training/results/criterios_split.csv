@@ -1,0 +1,7 @@
+criterio,cumple,detalle
+a) ningun grupo en dos splits,True,
+b) cero md5 identicos entre splits,True,
+c) cero pares dHash<=3 entre splits (n=0; umbral de union usado 3),True,
+d1) val y test con 12%-18% de cajas por clase,True,min 0.132 max 0.168
+d2) >=100 cajas G+bacilli en val y test,True,val 189 test 160
+e) crop/simple a <5 pts de train,True,"crop frac train/val/test = [0.695, 0.696, 0.702]"

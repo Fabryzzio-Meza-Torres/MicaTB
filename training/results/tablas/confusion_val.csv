@@ -1,0 +1,6 @@
+,G-cocci,G+cocci,G-bacilli,G+bacilli,fondo
+G-cocci,388,10,3,0,125
+G+cocci,5,116,0,1,57
+G-bacilli,16,0,721,7,165
+G+bacilli,0,1,7,96,85
+fondo,32,7,118,10,0

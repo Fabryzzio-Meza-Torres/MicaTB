@@ -1,0 +1,41 @@
+ai-edge-litert==2.2.0
+ai-edge-quantizer==0.9.0
+numpy==2.1.3
+onnx==1.22.0
+onnxruntime==1.31.0
+onnxslim==0.1.98
+opencv-contrib-python==4.14.0.94
+opencv-python==4.14.0.94
+opencv-python-headless==4.14.0.94
+pandas==2.3.3
+pandas-datareader==0.11.1
+pandas-gbq==0.30.0
+pandas-profiling==3.6.6
+pandas-stubs==2.2.3.250527
+pandasql==0.7.3
+scikit-image==0.25.2
+scikit-learn==1.6.1
+scikit-multilearn==0.2.0
+scikit-optimize==0.10.2
+scikit-plot==0.3.7
+scikit-surprise==1.1.5
+scipy==1.16.3
+tensorflow==2.20.0
+tensorflow-datasets==4.9.10
+tensorflow-hub==0.16.1
+tensorflow-metadata==1.21.0
+tensorflow-probability==0.25.0
+tensorflow-text==2.20.1
+torch @ https://download.pytorch.org/whl/cpu/torch-2.11.0%2Bcpu-cp313-cp313-manylinux_2_28_x86_64.whl
+torchao==0.18.0
+torchaudio @ https://download.pytorch.org/whl/cpu/torchaudio-2.11.0%2Bcpu-cp313-cp313-manylinux_2_28_x86_64.whl
+torchcodec @ https://download.pytorch.org/whl/cpu/torchcodec-0.11.0%2Bcpu-cp313-cp313-manylinux_2_28_x86_64.whl
+torchdata==0.11.0
+torchinfo==1.8.0
+torchmetrics==1.9.0
+torchsummary==1.5.1
+torchtune==0.6.1
+torchvision @ https://download.pytorch.org/whl/cpu/torchvision-0.26.0%2Bcpu-cp313-cp313-manylinux_2_28_x86_64.whl
+ultralytics==8.4.183
+ultralytics-platform==0.1.90
+ultralytics-thop==2.2.3
