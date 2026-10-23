@@ -26,12 +26,32 @@ reference/.venv/Scripts/pip install -r reference/requirements.txt
 reference/.venv/Scripts/python reference/reference_infer.py --dir reference/test_vectors --out reference/test_vectors/expected.json
 ```
 
-### MT-02 Proyecto Android base: pendiente
+### MT-02 Proyecto Android base: compila y pasa pruebas; falta probar en el celular
 
-Bloqueado por el entorno de esta PC: solo hay Java 8; faltan Android Studio, SDK, JDK 17 y adb. El usuario instalará Android Studio y activará la depuración USB. Celular de pruebas: aún sin definir (se usa minSdk 26).
+Qué se hizo:
+- Entorno instalado en esta PC: Android Studio, command-line tools, SDK (plataformas 36 y 37.0, build-tools 36.0.0, platform-tools) y licencias aceptadas.
+- Proyecto de un módulo (pe.utec.micatb, minSdk 26) con Compose, Material 3 y Navigation Compose, catálogo de versiones, wrapper de Gradle 9.6.0 y assets tomados de models/.
+- Pantalla Home que lee model_config.json y muestra el id del modelo, el aviso "Apoyo al tamizaje, no diagnóstico" y la nota de dominio.
+- Prueba JVM ModelConfigTest (2 pruebas) sobre el model_config.json real.
 
+Evidencia (gradlew.bat test assembleDebug):
+- BUILD SUCCESSFUL; ModelConfigTest: tests=2, failures=0, errors=0.
+- app-debug.apk de 21,8 MB con assets/ecoli_gb_E3s43_352_fp16.tflite, ..._int8.tflite y model_config.json (sin comprimir los tflite).
+- Permiso android.permission.INTERNET ausente en el manifiesto fusionado y en el APK (aapt2 dump permissions solo muestra el permiso interno de AndroidX).
+
+Qué falta (criterio de aceptación incompleto):
+- adb install y abrir la app mostrando el id del modelo: no hay celular conectado (adb devices vacío). Pendiente de que se conecte con depuración USB.
+- Celular de pruebas aún sin definir.
+- La compilación se hizo dentro de OneDrive y no hubo bloqueos de archivos en esta corrida; sigue siendo un riesgo si la sincronización interfiere.
+
+Cómo probarlo:
+
+```powershell
+$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
+.\gradlew.bat test assembleDebug
+& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" install -r app\build\outputs\apk\debug\app-debug.apk
+```
 ## Siguiente
 
-1. Instalar Android Studio y confirmar con adb devices.
-2. MT-02 según docs/BACKLOG.md.
-3. No pasar a MT-03 sin confirmación.
+1. Conectar el celular (depuración USB), correr adb devices, instalar el APK y comprobar la pantalla Home. Con eso se cierra MT-02.
+2. No pasar a MT-03 sin confirmación.

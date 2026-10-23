@@ -39,3 +39,11 @@ Riesgo abierto: Gradle dentro de OneDrive. Si la sincronización bloquea build/ 
 
 Contexto: MODEL_CONTRACT.md sección 6 exige diferencia de puntaje menor o igual a 0,01. Entre reference_infer.py (Windows) y los resultados de Kaggle con el mismo FP16 hay diferencias de hasta 0,024 en una detección con puntaje cercano a 0,5, con conteos y cajas iguales.
 Decisión: no se cambia el criterio todavía. Se decide en MT-04 con la medición en el celular. Si hace falta, ensanchar el puntaje a unos 0,03 y mantener conteo idéntico e IoU mayor o igual a 0,95. Pendiente de confirmación del equipo.
+## 2026-10-23 Toolchain Android (MT-02)
+
+Contexto: versiones verificadas en la documentación oficial el mismo día (developer.android.com y kotlinlang.org), no de memoria.
+Decisión: AGP 9.4.0 con Gradle 9.6.0 (mínimo exigido por esa versión; distribución verificada con su sha256 en gradle-wrapper.properties). AGP 9 trae Kotlin integrado, así que no se aplica kotlin-android; solo el plugin de Compose (versión 2.4.21, la estable actual de Kotlin). Compose BOM 2026.09.00, Navigation Compose 2.10.2, Activity Compose 1.13.0. compileSdk 37 porque las dependencias actuales de Compose y lifecycle lo exigen (con 36 el build falla); targetSdk 36 y minSdk 26 se mantienen, son decisiones separadas.
+JDK: el que trae Android Studio (JBR 25) vía JAVA_HOME; el build funcionó con él. Android Studio, command-line tools (sha256 verificado) y SDK (platform-tools, plataformas 36 y 37.0, build-tools 36.0.0) se instalaron con winget y sdkmanager, con las licencias aceptadas.
+Assets: app/build.gradle.kts añade ../models como directorio de assets, así models/ sigue siendo la única fuente del modelo y de model_config.json. noCompress para tflite. El APK de depuración incluye FP16, INT8 y la configuración (21,8 MB).
+Parseo de la configuración: org.json de Android en la app y la librería org.json:json solo en pruebas JVM (las pruebas leen el model_config.json real de models/).
+Descartado: aplicar kotlin-android (según la guía oficial, el Kotlin integrado de AGP 9 lo reemplaza) y un JDK 17 aparte (el build funcionó con el JBR).

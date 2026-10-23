@@ -71,6 +71,16 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 adb logcat -s MicaTB
 ```
 
+En esta PC (Windows, PowerShell) hace falta apuntar JAVA_HOME al JDK de Android Studio y usar el wrapper:
+
+```powershell
+$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
+.\gradlew.bat test assembleDebug
+& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" install -r app\build\outputs\apk\debug\app-debug.apk
+```
+
+local.properties (sdk.dir) no se sube al repositorio; se recrea con la ruta del SDK. Versiones fijadas en gradle/libs.versions.toml: AGP 9.4.0 (Gradle 9.6.0, Kotlin integrado), Kotlin 2.4.21 solo para el plugin de Compose, Compose BOM 2026.09.00, compileSdk 37, targetSdk 36, minSdk 26.
+
 ## Reglas de trabajo (IMPORTANTE)
 
 1. Antes de programar una tarea, lee su issue en docs/BACKLOG.md y la sección relevante de docs/SPEC.md. Propón un plan corto y espera mi OK si la tarea toca arquitectura, dependencias, seguridad del movimiento o el contrato del modelo.
