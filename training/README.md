@@ -8,7 +8,7 @@ Es un detector de bacterias Gram para la demo con E. coli. No es un detector de 
 
 ## Contenido
 
-- `notebooks/`: notebooks de Kaggle tal como se enviaron (sin ejecutar). Tabla abajo.
+- `notebooks/`: notebooks de Kaggle tal como se enviaron (sin salidas; `kaggle kernels pull` no las trae). Tabla abajo. `notebooks/executed/` guarda una copia ejecutada de `ecoli-final` (ruta 320 anterior, no la PAD352).
 - `src/`: scripts `k*.py` que generan los notebooks (`build_nb.py`) y la librería común `eclib.py`.
 - `results/`: tablas, métricas, configuración, manifiesto del split y sumas de verificación.
 - `weights/`: `.pt`, `.onnx` y TFLite FP32 del modelo final, para reproducir exportaciones (Git LFS).

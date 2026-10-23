@@ -1,0 +1,1006 @@
+{
+ "model_id": "ecoli_gb_E3s43_352_fp16",
+ "variant": "fp16",
+ "sha256": "08538648bcb79f2f75c7948c5dfaa2266c87016b5dfe9517034f824ed8f980b3",
+ "base_conf": 0.25,
+ "images": {
+  "000087_3_5.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 1,
+   "count_broad": 1,
+   "detections": [
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.8592,
+     "box": [
+      91.2,
+      442.4,
+      147.3,
+      523.2
+     ]
+    }
+   ]
+  },
+  "000130_6_5.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 2,
+   "count_broad": 2,
+   "detections": [
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7375,
+     "box": [
+      523.3,
+      200.2,
+      572.6,
+      247.7
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7107,
+     "box": [
+      151.7,
+      183.0,
+      195.2,
+      240.8
+     ]
+    }
+   ]
+  },
+  "000163_4_4.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 2,
+   "count_broad": 2,
+   "detections": [
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.8355,
+     "box": [
+      250.1,
+      196.8,
+      307.5,
+      240.3
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.739,
+     "box": [
+      31.3,
+      123.8,
+      84.3,
+      168.8
+     ]
+    }
+   ]
+  },
+  "000186_2_6.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 2,
+   "count_broad": 2,
+   "detections": [
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.8448,
+     "box": [
+      123.3,
+      245.4,
+      214.6,
+      300.5
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.8443,
+     "box": [
+      175.3,
+      110.2,
+      257.0,
+      167.7
+     ]
+    }
+   ]
+  },
+  "000206_1_3.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 1,
+   "count_broad": 1,
+   "detections": [
+    {
+     "cls": 0,
+     "class": "G-cocci",
+     "score": 0.8285,
+     "box": [
+      343.7,
+      514.4,
+      395.6,
+      564.8
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.6417,
+     "box": [
+      224.2,
+      9.5,
+      272.1,
+      70.8
+     ]
+    },
+    {
+     "cls": 0,
+     "class": "G-cocci",
+     "score": 0.3525,
+     "box": [
+      281.0,
+      595.1,
+      330.7,
+      639.0
+     ]
+    }
+   ]
+  },
+  "000231_0_5.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 1,
+   "count_broad": 1,
+   "detections": [
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.8561,
+     "box": [
+      384.9,
+      545.6,
+      457.1,
+      613.1
+     ]
+    }
+   ]
+  },
+  "000232_4_1.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 1,
+   "count_broad": 1,
+   "detections": [
+    {
+     "cls": 0,
+     "class": "G-cocci",
+     "score": 0.7958,
+     "box": [
+      99.3,
+      139.2,
+      154.3,
+      198.0
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7909,
+     "box": [
+      447.6,
+      320.7,
+      511.7,
+      396.5
+     ]
+    },
+    {
+     "cls": 0,
+     "class": "G-cocci",
+     "score": 0.7658,
+     "box": [
+      68.8,
+      236.3,
+      128.9,
+      296.1
+     ]
+    }
+   ]
+  },
+  "000245_4_3.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 1,
+   "count_broad": 2,
+   "detections": [
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.8026,
+     "box": [
+      345.4,
+      202.3,
+      408.1,
+      253.6
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.4245,
+     "box": [
+      223.7,
+      494.0,
+      282.3,
+      542.6
+     ]
+    }
+   ]
+  },
+  "000280_4_1.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 3,
+   "count_broad": 5,
+   "detections": [
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7629,
+     "box": [
+      241.4,
+      334.1,
+      304.9,
+      393.5
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7606,
+     "box": [
+      323.0,
+      105.3,
+      373.2,
+      198.7
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.699,
+     "box": [
+      380.1,
+      91.4,
+      423.8,
+      141.7
+     ]
+    },
+    {
+     "cls": 3,
+     "class": "G+bacilli",
+     "score": 0.524,
+     "box": [
+      158.9,
+      449.9,
+      234.5,
+      518.4
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.4169,
+     "box": [
+      158.8,
+      449.3,
+      234.9,
+      518.3
+     ]
+    }
+   ]
+  },
+  "000343_0_7.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 5,
+   "count_broad": 5,
+   "detections": [
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7915,
+     "box": [
+      211.1,
+      276.9,
+      285.4,
+      338.2
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7701,
+     "box": [
+      248.6,
+      403.5,
+      312.2,
+      446.0
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7328,
+     "box": [
+      433.0,
+      191.6,
+      483.1,
+      244.2
+     ]
+    },
+    {
+     "cls": 0,
+     "class": "G-cocci",
+     "score": 0.7147,
+     "box": [
+      509.8,
+      468.6,
+      551.5,
+      509.8
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.6863,
+     "box": [
+      336.7,
+      502.2,
+      379.2,
+      552.1
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.5229,
+     "box": [
+      350.6,
+      395.3,
+      398.7,
+      441.7
+     ]
+    }
+   ]
+  },
+  "000358_3_3.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 4,
+   "count_broad": 4,
+   "detections": [
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.8384,
+     "box": [
+      407.0,
+      146.2,
+      447.1,
+      202.3
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.819,
+     "box": [
+      203.8,
+      300.2,
+      251.6,
+      364.5
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7951,
+     "box": [
+      323.9,
+      205.7,
+      368.8,
+      257.9
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.6811,
+     "box": [
+      577.2,
+      548.9,
+      620.7,
+      601.6
+     ]
+    }
+   ]
+  },
+  "900077.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 0,
+   "count_broad": 0,
+   "detections": [
+    {
+     "cls": 0,
+     "class": "G-cocci",
+     "score": 0.4465,
+     "box": [
+      175.0,
+      31.2,
+      222.0,
+      81.7
+     ]
+    }
+   ]
+  },
+  "900273.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 5,
+   "count_broad": 5,
+   "detections": [
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.8187,
+     "box": [
+      326.5,
+      383.8,
+      386.7,
+      433.0
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7691,
+     "box": [
+      56.7,
+      81.5,
+      99.6,
+      146.1
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7556,
+     "box": [
+      549.4,
+      173.5,
+      611.5,
+      212.0
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7377,
+     "box": [
+      265.9,
+      525.3,
+      300.8,
+      583.1
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7086,
+     "box": [
+      87.2,
+      555.3,
+      152.8,
+      639.0
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.3615,
+     "box": [
+      114.7,
+      360.6,
+      147.9,
+      424.2
+     ]
+    }
+   ]
+  },
+  "900335.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 3,
+   "count_broad": 3,
+   "detections": [
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7666,
+     "box": [
+      410.1,
+      288.8,
+      459.0,
+      345.9
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.6927,
+     "box": [
+      409.9,
+      220.6,
+      474.6,
+      267.3
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.6786,
+     "box": [
+      489.1,
+      591.7,
+      558.8,
+      635.6
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.3245,
+     "box": [
+      602.4,
+      307.7,
+      639.8,
+      348.1
+     ]
+    }
+   ]
+  },
+  "901021.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 0,
+   "count_broad": 1,
+   "detections": [
+    {
+     "cls": 3,
+     "class": "G+bacilli",
+     "score": 0.4635,
+     "box": [
+      328.5,
+      141.6,
+      385.5,
+      183.8
+     ]
+    }
+   ]
+  },
+  "901247.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 0,
+   "count_broad": 1,
+   "detections": [
+    {
+     "cls": 3,
+     "class": "G+bacilli",
+     "score": 0.5885,
+     "box": [
+      299.3,
+      144.3,
+      371.7,
+      201.7
+     ]
+    },
+    {
+     "cls": 1,
+     "class": "G+cocci",
+     "score": 0.5207,
+     "box": [
+      436.5,
+      147.0,
+      479.5,
+      189.8
+     ]
+    }
+   ]
+  },
+  "901647.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 1,
+   "count_broad": 1,
+   "detections": [
+    {
+     "cls": 0,
+     "class": "G-cocci",
+     "score": 0.7853,
+     "box": [
+      293.6,
+      442.7,
+      340.0,
+      487.9
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.6858,
+     "box": [
+      494.4,
+      358.3,
+      539.1,
+      403.1
+     ]
+    },
+    {
+     "cls": 0,
+     "class": "G-cocci",
+     "score": 0.4521,
+     "box": [
+      564.5,
+      176.2,
+      603.2,
+      218.0
+     ]
+    }
+   ]
+  },
+  "901699.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 16,
+   "count_broad": 16,
+   "detections": [
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.8841,
+     "box": [
+      255.7,
+      222.4,
+      353.6,
+      272.1
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.793,
+     "box": [
+      42.4,
+      420.0,
+      91.0,
+      514.0
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7912,
+     "box": [
+      445.9,
+      496.0,
+      501.9,
+      553.6
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7845,
+     "box": [
+      248.9,
+      32.5,
+      294.8,
+      95.1
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7775,
+     "box": [
+      17.9,
+      315.5,
+      67.5,
+      365.1
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7592,
+     "box": [
+      542.9,
+      428.1,
+      606.3,
+      467.4
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.758,
+     "box": [
+      13.0,
+      489.8,
+      56.3,
+      551.4
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7534,
+     "box": [
+      147.0,
+      462.8,
+      185.7,
+      521.2
+     ]
+    },
+    {
+     "cls": 0,
+     "class": "G-cocci",
+     "score": 0.753,
+     "box": [
+      469.4,
+      381.3,
+      517.0,
+      431.7
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7309,
+     "box": [
+      386.7,
+      455.8,
+      429.1,
+      538.1
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7238,
+     "box": [
+      558.0,
+      235.1,
+      615.8,
+      273.7
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7198,
+     "box": [
+      207.7,
+      442.1,
+      271.1,
+      479.6
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7165,
+     "box": [
+      140.8,
+      80.7,
+      209.6,
+      126.3
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.6957,
+     "box": [
+      3.8,
+      239.4,
+      44.7,
+      297.5
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.6955,
+     "box": [
+      41.3,
+      153.2,
+      93.7,
+      197.3
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.678,
+     "box": [
+      578.5,
+      469.9,
+      626.4,
+      511.5
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.5709,
+     "box": [
+      114.7,
+      372.9,
+      222.3,
+      422.5
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.289,
+     "box": [
+      71.1,
+      361.0,
+      113.3,
+      405.9
+     ]
+    }
+   ]
+  },
+  "902364.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 0,
+   "count_broad": 1,
+   "detections": [
+    {
+     "cls": 3,
+     "class": "G+bacilli",
+     "score": 0.7708,
+     "box": [
+      169.9,
+      440.8,
+      213.7,
+      516.1
+     ]
+    },
+    {
+     "cls": 0,
+     "class": "G-cocci",
+     "score": 0.7579,
+     "box": [
+      216.3,
+      375.2,
+      266.8,
+      427.8
+     ]
+    },
+    {
+     "cls": 1,
+     "class": "G+cocci",
+     "score": 0.7342,
+     "box": [
+      64.0,
+      423.2,
+      101.3,
+      459.2
+     ]
+    },
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.2667,
+     "box": [
+      81.5,
+      165.4,
+      133.7,
+      206.6
+     ]
+    }
+   ]
+  },
+  "902586.jpg": {
+   "width": 640,
+   "height": 640,
+   "count_strict": 0,
+   "count_broad": 0,
+   "detections": [
+    {
+     "cls": 1,
+     "class": "G+cocci",
+     "score": 0.7923,
+     "box": [
+      159.6,
+      50.9,
+      204.8,
+      95.6
+     ]
+    }
+   ]
+  },
+  "nocuadrada_0_901021.jpg": {
+   "width": 640,
+   "height": 480,
+   "count_strict": 0,
+   "count_broad": 1,
+   "detections": [
+    {
+     "cls": 3,
+     "class": "G+bacilli",
+     "score": 0.5706,
+     "box": [
+      329.8,
+      61.7,
+      385.0,
+      103.4
+     ]
+    }
+   ]
+  },
+  "nocuadrada_1_000087_3_5.jpg": {
+   "width": 400,
+   "height": 640,
+   "count_strict": 1,
+   "count_broad": 1,
+   "detections": [
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.7676,
+     "box": [
+      4.0,
+      443.3,
+      47.4,
+      522.0
+     ]
+    }
+   ]
+  },
+  "nocuadrada_2_901647.jpg": {
+   "width": 580,
+   "height": 240,
+   "count_strict": 0,
+   "count_broad": 0,
+   "detections": [
+    {
+     "cls": 2,
+     "class": "G-bacilli",
+     "score": 0.3331,
+     "box": [
+      475.9,
+      198.6,
+      517.5,
+      236.8
+     ]
+    }
+   ]
+  }
+ }
+}

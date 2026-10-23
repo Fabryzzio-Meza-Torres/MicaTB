@@ -14,15 +14,17 @@ Equipo: UTEC (Fabryzzio en computación, Maritza en bioingeniería, Oswaldo en m
 
 - YOLOv8n de Ultralytics, ajustado desde COCO, unos 3,0 M de parámetros.
 - Es un detector de bacterias Gram entrenado con el Clinical Bacteria DataSet. NO es un detector de TB (Ziehl-Neelsen). Sirve para la demo con E. coli. El modelo de TB vendrá después y debe entrar solo cambiando models/model_config.json, sin tocar código.
-- Candidato actual: entrada 320 px, TFLite FP16, archivo ecoli_gb_E3s43_fp16.tflite (6,45 MB). Hay una versión INT8 (peor: baja unos 3 puntos de mAP50) y un respaldo de 416 px.
+- Modelo actual (ruta PAD352): entrenado a 320; en inferencia se hace letterbox a 320 y se añaden 16 px de gris 114 por lado, así que la entrada es 352 x 352 (el borde es parte del modelo: sin él baja el recall). TFLite FP16, archivo ecoli_gb_E3s43_352_fp16.tflite (6,46 MB). Variante INT8 (3,4 MB) para medir en el benchmark. La ruta anterior de 320 sin borde y el respaldo de 416 no se usan.
 - 4 clases Gram: G-cocci, G+cocci, G-bacilli, G+bacilli. El conteo principal (estricto) usa solo G-bacilli. El conteo amplio suma G-bacilli y G+bacilli.
-- Parámetros de operación elegidos en validación: conf 0,60, NMS IoU 0,5, max_det 1000.
-- Métricas en test (datos parecidos a los de entrenamiento, no del celular): precisión 0,87, recall 0,82 (media de 3 semillas 0,79), error medio de conteo 0,24 por imagen. Latencia 22 a 26 ms es solo una estimación, no una medición en celular.
-- Debilidades conocidas: campos densos (recall cerca de 0,72), células pequeñas a 320 px (recall cerca de 0,69), sensibilidad al brillo, y brecha de dominio entre las imágenes de entrenamiento y las fotos de un celular sobre el ocular.
+- Parámetros de operación elegidos en validación: NMS IoU 0,5, max_det 1000, conf 0,45 para el conteo estricto y 0,40 para el amplio.
+- Métricas en test (890 imágenes, datos parecidos a los de entrenamiento, no del celular): precisión 0,901, recall 0,874 (IC 95 % 0,828 a 0,919; media de 3 semillas 0,858), error medio de conteo 0,185 por imagen. El recall cumple por poco: no darlo por cerrado. Latencia 22 a 26 ms es solo una estimación en CPU de Kaggle, no una medición en celular.
+- Debilidades conocidas: campos densos y células pequeñas (cifras de la ruta 320 anterior, ver docs/ref/MODEL_CARD.md), sensibilidad al brillo, y brecha de dominio entre las imágenes de entrenamiento y las fotos de un celular sobre el ocular.
 
-## Lo que NO está verificado (comprueba antes de usarlo)
+## Verificado en MT-01 y lo que sigue sin verificar
 
-Ver docs/MODEL_CONTRACT.md. En particular: orden real de las clases, tipo y layout de entrada (lo esperable es float32 NHWC aunque los pesos sean FP16), forma y significado del tensor de salida (lo esperable es 1 x 8 x 2100 sin NMS, pero se confirma inspeccionando), unidades de las cajas, y paridad contra el script de Python de reference/.
+Verificado inspeccionando los .tflite (ver docs/MODEL_CONTRACT.md y docs/DECISIONS.md): entrada [1,3,352,352] float32 NCHW en RGB 0 a 1, salida [1,8,2541] float32 sin NMS, cajas cx,cy,w,h normalizadas respecto a 352, puntajes ya activados, orden de clases confirmado, cuantización 0 también en INT8. El script reference/reference_infer.py reproduce los resultados de Kaggle (conteos 20 de 20).
+
+Sigue sin verificar: paridad de la app contra reference/ (MT-04), latencia en el celular (MT-09) y comportamiento con fotos reales de microscopio.
 
 ## Stack decidido
 
@@ -53,6 +55,7 @@ app/src/main/java/pe/utec/micatb/
 app/src/main/assets/   modelos y model_config.json
 models/        copias de los modelos y model_config.json (fuente de verdad)
 reference/     reference_infer.py, test_vectors/, imágenes de muestra
+training/      notebooks de Kaggle, scripts, tablas y pesos del entrenamiento (solo referencia)
 docs/          SPEC.md, MODEL_CONTRACT.md, BACKLOG.md, DECISIONS.md, ref/
 PROGRESS.md    estado vivo del trabajo
 ```

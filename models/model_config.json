@@ -1,0 +1,33 @@
+{
+  "model_id": "ecoli_gb_E3s43_352_fp16",
+  "file": "ecoli_gb_E3s43_352_fp16.tflite",
+  "sha256": "08538648bcb79f2f75c7948c5dfaa2266c87016b5dfe9517034f824ed8f980b3",
+  "variants": {
+    "int8": { "file": "ecoli_gb_E3s43_352_int8.tflite", "sha256": "da776aab222f7603590a1c2a1af78d7944ae0e543a426992e723ccc02d047234" }
+  },
+  "task": "detection",
+  "domain_note": "Demo Gram E. coli. No es un detector de TB. No usar clinicamente.",
+  "input": {
+    "width": 352, "height": 352, "content": 320, "border": 16,
+    "layout": "NCHW", "dtype": "float32", "color": "RGB",
+    "scale": 0.00392156862745098, "letterbox": true, "pad_value": 114,
+    "interpolation": "bilinear"
+  },
+  "output": {
+    "shape": [1, 8, 2541],
+    "layout": "channels_first",
+    "box_format": "xywh",
+    "box_units": "normalized",
+    "has_objectness": false,
+    "scores_activated": true,
+    "nms_in_model": false
+  },
+  "classes": ["G-cocci", "G+cocci", "G-bacilli", "G+bacilli"],
+  "classes_verified": true,
+  "postprocess": { "base_conf": 0.25, "nms_iou": 0.5, "max_det": 1000, "class_agnostic_nms": false },
+  "counting": {
+    "recommended": "strict",
+    "strict": { "classes": ["G-bacilli"], "conf": 0.45 },
+    "broad": { "classes": ["G-bacilli", "G+bacilli"], "conf": 0.40 }
+  }
+}

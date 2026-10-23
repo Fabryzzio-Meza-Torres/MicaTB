@@ -1,97 +1,98 @@
 # Contrato del modelo (Mica TB)
 
-Este documento separa lo que ya se sabe de lo que hay que verificar. La app no debe tener valores del modelo escritos en el código: todo sale de models/model_config.json.
+La app no debe tener valores del modelo escritos en el código: todo sale de models/model_config.json. Este documento recoge lo que se sabe, lo que se verificó en MT-01 y lo que queda por verificar.
 
 ## 1. Lo que se sabe (viene del proyecto de entrenamiento)
 
 - Arquitectura: YOLOv8n (Ultralytics). Tarea: detección de objetos.
-- Entrenado con el Clinical Bacteria DataSet (frotis con tinción Gram). Es el modelo de la demo con E. coli. No es el modelo de TB.
-- Archivos: ecoli_gb_E3s43_fp16.tflite (candidato, entrada 320 px, 6,45 MB), una versión INT8 y un respaldo de 416 px.
-- Clases (4): G-cocci, G+cocci, G-bacilli, G+bacilli. El orden de índices debe confirmarse (ver sección 2).
-- Operación elegida en validación: conf 0,60, NMS IoU 0,5, max_det 1000. Conteo estricto: solo G-bacilli. Conteo amplio: G-bacilli y G+bacilli.
-- Referencias de calidad en test: precisión 0,87, recall 0,82, error de conteo 0,24 por imagen, mAP50 0,955. En 300 imágenes de paridad, FP32, FP16 y ONNX dieron mAP50 0,906 e INT8 0,874. Esas cifras son del dominio de entrenamiento, no del celular.
-- Debilidades: campos densos, células pequeñas a 320 px, sensibilidad al brillo, brecha de dominio con fotos del celular.
+- Entrenado con el Clinical Bacteria DataSet (frotis con tinción Gram, CC BY 4.0). Es el modelo de la demo con E. coli. No es el modelo de TB.
+- Ruta PAD352: se entrena a 320. En inferencia se hace letterbox a 320 y se añaden 16 px de gris por lado, así que la entrada es 352 x 352. El borde es parte del modelo: sin él el recall de validación baja de 0,866 a 0,818.
+- Archivos: models/ecoli_gb_E3s43_352_fp16.tflite (por defecto, 6,46 MB) y models/ecoli_gb_E3s43_352_int8.tflite (3,4 MB, variante a medir). La ruta anterior de 320 sin borde y el respaldo de 416 (exportado sin borde, no probado con él) quedan fuera de la app.
+- Clases (4): G-cocci, G+cocci, G-bacilli, G+bacilli.
+- Operación elegida en validación: NMS IoU 0,5, max_det 1000. Conteo estricto: solo G-bacilli con conf 0,45. Conteo amplio: G-bacilli y G+bacilli con conf 0,40.
+- Referencias de calidad en test (890 imágenes, FP32 de ultralytics): precisión 0,901, recall 0,874 (IC 95 % por grupos 0,828 a 0,919; media de 3 semillas 0,858), error de conteo 0,185 por imagen (IC 0,138 a 0,245). Son cifras del dominio de entrenamiento, no del celular. Detalle y límites en docs/ref/ACCEPTANCE.md y docs/ref/MODEL_CARD.md.
+- Debilidades: campos densos, células pequeñas, sensibilidad al brillo, brecha de dominio con fotos del celular. El recall cumple por poco.
 
-## 2. Lo que hay que verificar (no asumir)
+## 2. Verificado en MT-01 (inspección de los .tflite con ai-edge-litert 2.2.0)
 
-Inspecciona el .tflite con Python (paquete ai-edge-litert o tensorflow) y registra:
-
-| Punto | Esperable, a confirmar | Cómo verificarlo |
+| Punto | Resultado | Cómo se verificó |
 |---|---|---|
-| Tensor de entrada | 1 x 320 x 320 x 3, float32 (los pesos FP16 no cambian el tipo de entrada) | get_input_details() |
-| Normalización | RGB, dividir entre 255, rango 0 a 1 | probar con una imagen y comparar con el .pt de Ultralytics |
-| Preprocesado | letterbox con relleno gris 114, mantener proporción | comparar detecciones con y sin letterbox |
-| Tensor de salida | 1 x 8 x 2100 (4 de caja y 4 de clases), sin objectness, sin NMS dentro | get_output_details(), forma y rango de valores |
-| Cajas | xywh, centro y tamaño, normalizadas 0 a 1 respecto a la entrada (o en píxeles) | mirar el rango de los 4 primeros canales |
-| Puntajes | ya con sigmoide aplicada, rango 0 a 1 | mirar el rango de los canales de clase |
-| Orden de clases | G-cocci, G+cocci, G-bacilli, G+bacilli | leer el data.yaml del entrenamiento o metadatos del .tflite |
-| Cuantización INT8 | parámetros de escala y punto cero de entrada y salida | get_input_details()[0]["quantization"] |
+| Tensor de entrada | [1, 3, 352, 352], float32, NCHW, cuantización (0.0, 0) en FP16 e INT8 | get_input_details() |
+| Normalización | RGB, píxel / 255, rango 0 a 1, sin media ni desviación | reference_infer.py reproduce los conteos de Kaggle |
+| Preprocesado | letterbox a 320 (bilineal, relleno 114, centrado) más 16 px de 114 por lado | idem |
+| Tensor de salida | [1, 8, 2541], float32, sin objectness, sin NMS dentro. 2541 = 44² + 22² + 11² | get_output_details() |
+| Cajas | filas 0 a 3 = cx, cy, w, h normalizados respecto a 352 (rango observado 0,005 a 1,07) | rango de los canales sobre una imagen |
+| Puntajes | filas 4 a 7, ya activados, rango 0 a 1 (observado 0 a 0,83) | idem |
+| Orden de clases | 0 G-cocci, 1 G+cocci, 2 G-bacilli, 3 G+bacilli | app_config.json del entrenamiento y detecciones en imágenes con G-bacilli conocidos |
+| INT8 | entrada y salida siguen en float32; el INT8 es interno. Mismos tensores que FP16 | get_input_details() y get_output_details() |
+| Hashes | coinciden con docs/ref/SHA256SUMS.txt del entrenamiento | sha256 |
 
-Si algo no coincide con lo esperable, se documenta en docs/DECISIONS.md y se corrige model_config.json. No se adivina.
+## 3. Material de la Fase 0 (estado)
 
-## 3. Información que me debes proporcionar antes de la Fase 0
-
-- Los archivos .tflite (FP16, INT8 y 416 px) y su hash sha256.
-- El data.yaml (o la lista de clases con su índice) del entrenamiento.
-- reference/reference_infer.py: script de Python que ejecuta el mismo .tflite con el mismo preprocesado y postprocesado que usará la app. Si aún no existe, la issue MT-01 lo crea.
-- reference/test_vectors/: de 10 a 20 imágenes con su resultado esperado (expected.json) generado por ese script, incluyendo al menos 2 campos vacíos y 2 densos.
-- docs/ref/: MODEL_CARD.md, ACCEPTANCE.md, RESUMEN.md y EDA_DECISIONES.md del entrenamiento.
-- Modelo y versión de Android del celular de pruebas.
+- Modelos y sha256: en models/ y model_config.json.
+- Clases con su índice: en model_config.json.
+- reference/reference_infer.py: lee model_config.json y genera expected.json.
+- reference/test_vectors/: 23 imágenes. 20 con resultado independiente de Kaggle (kaggle_expected.json) y 3 no cuadradas sin resultado de Kaggle, solo el del script. Entre los 20 comparables hay 5 con conteo estricto 0 y campos con 5 y 16 bacilos.
+- docs/ref/: resultados del entrenamiento, solo lectura.
+- Pendiente: modelo y versión de Android del celular de pruebas.
 
 ## 4. Esquema de models/model_config.json
 
-Los valores de abajo son los esperables. Los marcados VERIFICAR deben confirmarse antes de usarlos.
+Es el archivo real de models/. Para el modelo de TB futuro cambian model_id, file, sha256, input, output, classes, counting y postprocess.
 
 ```json
 {
-  "model_id": "ecoli_gb_E3s43_fp16",
-  "file": "ecoli_gb_E3s43_fp16.tflite",
-  "sha256": "VERIFICAR",
+  "model_id": "ecoli_gb_E3s43_352_fp16",
+  "file": "ecoli_gb_E3s43_352_fp16.tflite",
+  "sha256": "08538648...f980b3",
+  "variants": { "int8": { "file": "ecoli_gb_E3s43_352_int8.tflite", "sha256": "da776aab...047234" } },
   "task": "detection",
-  "domain_note": "Demo Gram E. coli. No es un detector de TB. No usar clínicamente.",
+  "domain_note": "Demo Gram E. coli. No es un detector de TB. No usar clinicamente.",
   "input": {
-    "width": 320, "height": 320, "layout": "NHWC", "dtype": "float32",
-    "color": "RGB", "scale": 0.00392157, "letterbox": true, "pad_value": 114
+    "width": 352, "height": 352, "content": 320, "border": 16,
+    "layout": "NCHW", "dtype": "float32", "color": "RGB",
+    "scale": 0.00392156862745098, "letterbox": true, "pad_value": 114, "interpolation": "bilinear"
   },
   "output": {
-    "shape": "VERIFICAR",
-    "layout": "channels_first",
-    "box_format": "xywh",
-    "box_units": "VERIFICAR (normalized o pixels)",
-    "has_objectness": false,
-    "nms_in_model": false
+    "shape": [1, 8, 2541], "layout": "channels_first", "box_format": "xywh",
+    "box_units": "normalized", "has_objectness": false, "scores_activated": true, "nms_in_model": false
   },
   "classes": ["G-cocci", "G+cocci", "G-bacilli", "G+bacilli"],
-  "classes_verified": false,
-  "postprocess": { "conf": 0.60, "nms_iou": 0.5, "max_det": 1000, "class_agnostic_nms": false },
-  "counting": { "strict": ["G-bacilli"], "broad": ["G-bacilli", "G+bacilli"] }
+  "classes_verified": true,
+  "postprocess": { "base_conf": 0.25, "nms_iou": 0.5, "max_det": 1000, "class_agnostic_nms": false },
+  "counting": {
+    "recommended": "strict",
+    "strict": { "classes": ["G-bacilli"], "conf": 0.45 },
+    "broad": { "classes": ["G-bacilli", "G+bacilli"], "conf": 0.40 }
+  }
 }
 ```
-
-Para el modelo de TB futuro solo cambian model_id, file, sha256, classes, counting y postprocess.
 
 ## 5. Pipeline de inferencia que debe implementar la app
 
 1. Decodificar la foto aplicando la rotación EXIF. Trabajar en RGB.
-2. Letterbox al tamaño de entrada manteniendo la proporción y rellenando con pad_value. Guardar escala y desplazamientos para deshacerlo.
-3. Normalizar con scale y cargar el tensor en el layout indicado.
-4. Ejecutar el intérprete (CPU, 4 hilos al inicio).
-5. Decodificar la salida: por cada ancla, la clase de mayor puntaje y su puntaje. Descartar lo menor que conf.
-6. Convertir las cajas a esquinas, deshacer el letterbox y recortar a los límites de la imagen original.
-7. NMS por clase (o el modo indicado en la configuración) con nms_iou y límite max_det.
-8. Devolver detecciones (caja, clase, puntaje), conteo estricto, conteo amplio y tiempos de preprocesado, inferencia y postprocesado.
+2. Letterbox a input.content (320) manteniendo la proporción: r = min(320/alto, 320/ancho), redimensionar a round(ancho·r) x round(alto·r) con interpolación bilineal, rellenar con pad_value centrando (top = round(dh - 0,1), left = round(dw - 0,1), con dh y dw la mitad del relleno que falta). Guardar r, left y top.
+3. Añadir input.border (16) px de pad_value por cada lado. El desplazamiento total es left + 16 y top + 16.
+4. Multiplicar por scale y cargar el tensor NCHW [1, 3, 352, 352].
+5. Ejecutar el intérprete (CPU, 4 hilos al inicio).
+6. Decodificar: por cada ancla, la clase de mayor puntaje y su puntaje. Descartar lo que no supere base_conf (0,25). Cajas: (cx - w/2, cy - h/2, cx + w/2, cy + h/2) por 352.
+7. NMS por clase con nms_iou. Ordenar por puntaje y recortar a max_det.
+8. Deshacer el preprocesado: x_orig = (x - left_total) / r, y_orig = (y - top_total) / r, y recortar a los límites de la imagen original.
+9. Devolver las detecciones crudas (caja, clase, puntaje), los conteos estricto y amplio y los tiempos de preprocesado, inferencia y postprocesado.
 
-Optimización pedida: el umbral conf del deslizador se aplica sobre las detecciones crudas guardadas en memoria, de modo que cambiarlo no obliga a recapturar ni a volver a ejecutar el modelo. Ejecutar el modelo con un umbral base bajo (por ejemplo 0,25) y filtrar después. Documentar esta decisión en docs/DECISIONS.md.
+Los conteos aplican "puntaje > conf" (estrictamente mayor) de cada definición, sobre las clases de esa definición. Filtrar después del NMS da el mismo resultado que filtrar antes, porque el NMS voraz por clase solo deja que las cajas de mayor puntaje supriman a las de menor puntaje. Por eso el deslizador de conf se aplica sobre las detecciones crudas guardadas en memoria, sin recapturar ni volver a ejecutar el modelo. Decisión registrada en docs/DECISIONS.md.
 
 ## 6. Prueba de paridad (compuerta de la Fase 1)
 
 Objetivo: comprobar que la app calcula lo mismo que Python con el mismo archivo .tflite.
 
-- Python (reference_infer.py) ejecuta el .tflite sobre cada imagen de reference/test_vectors/ y escribe expected.json con detecciones después de NMS (caja en píxeles originales, clase, puntaje) y los conteos.
+- Python (reference/reference_infer.py) ejecuta el .tflite sobre cada imagen de reference/test_vectors/ y escribe expected.json con las detecciones después de NMS a base_conf (caja en píxeles originales, clase, puntaje) y los dos conteos.
 - La app corre las mismas imágenes en una prueba instrumentada en el celular (connectedDebugAndroidTest).
 - Criterio: mismo conteo estricto en todas las imágenes. Emparejando cajas de forma voraz por IoU, IoU mayor o igual a 0,95 y diferencia de puntaje menor o igual a 0,01.
-- Si falla: no se avanza. Revisar en este orden: RGB contra BGR, escala 0 a 1, unidades de las cajas, deshacer el letterbox, rotación EXIF, orden de clases.
-- Prueba aparte, hecha en Kaggle y no en la app: el .pt contra el .tflite exportado en las mismas 300 imágenes, para descartar pérdidas por la exportación.
+- Si falla: no se avanza. Revisar en este orden: RGB contra BGR, escala 0 a 1, unidades de las cajas, deshacer letterbox y borde, rotación EXIF, orden de clases.
+- Prueba aparte, hecha en Kaggle y no en la app: ultralytics contra el .tflite exportado en las mismas 300 imágenes. Resultado: mismo conteo en 300 de 300 y cajas dentro de 0,05 px.
+
+Nota de MT-01 sobre la tolerancia de puntaje: al comparar reference_infer.py (Windows, ai-edge-litert 2.2.0) con los resultados que Kaggle generó con el mismo archivo FP16, los conteos estricto y amplio coinciden en 20 de 20 imágenes y las cajas emparejadas tienen IoU mínimo 0,984, pero los puntajes difieren hasta 0,024 (una detección con puntaje cercano a 0,5). Entre dos intérpretes de escritorio ya se supera el 0,01 del criterio, así que es probable que el celular también lo supere. Está pendiente decidir en MT-04, con una medición en el celular, si se ensancha la tolerancia de puntaje. El criterio de arriba no se ha cambiado.
 
 ## 7. Protocolo de benchmark en el celular
 
@@ -103,4 +104,4 @@ Objetivo: comprobar que la app calcula lo mismo que Python con el mismo archivo 
 
 ## 8. Umbral y dominio
 
-El conf 0,60 se eligió con imágenes del dataset. Con fotos del celular los puntajes pueden bajar. Por eso conf es ajustable en la app y se recalibra con unas decenas de campos propios (fase de capturas propias). Si en el pase cualitativo con 20 a 30 campos reales el modelo casi no detecta nada, el primer paso es mirar los puntajes y el brillo, antes de tocar el modelo.
+Los umbrales 0,45 y 0,40 se eligieron con imágenes del dataset. Con fotos del celular los puntajes pueden bajar. Por eso conf es ajustable en la app y se recalibra con unas decenas de campos propios (fase de capturas propias). Si en el pase cualitativo con 20 a 30 campos reales el modelo casi no detecta nada, el primer paso es mirar los puntajes y el brillo, antes de tocar el modelo.
