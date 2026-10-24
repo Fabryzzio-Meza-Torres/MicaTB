@@ -57,6 +57,7 @@ import pe.utec.micatb.inference.countFor
 import pe.utec.micatb.inference.selectFor
 import pe.utec.micatb.quality.QualityFlag
 import pe.utec.micatb.quality.QualityReport
+import pe.utec.micatb.ui.components.CameraPreviewView
 import pe.utec.micatb.ui.components.ClassGlyph
 import pe.utec.micatb.ui.components.HairlineDivider
 import pe.utec.micatb.ui.components.MicaButton
@@ -167,7 +168,7 @@ private fun PlateSection(vm: CaptureViewModel, container: AppContainer, state: C
                 MicaButton(onClick = onAskCamera, Modifier.height(48.dp)) { Text("Permitir cámara") }
             }
 
-            state.phase == Phase.CAMERA -> CameraPreview(vm)
+            state.phase == Phase.CAMERA -> CameraPreviewView(vm.camera)
 
             bmp != null -> {
                 Image(bmp.asImageBitmap(), "Campo analizado", Modifier.fillMaxSize(), contentScale = ContentScale.Fit)
@@ -196,31 +197,6 @@ private fun scaleBarFor(imageWidth: Int, fieldWidthUm: Float): ScaleBar {
     val pow = Math.pow(10.0, Math.floor(Math.log10(target.toDouble()))).toFloat()
     val um = listOf(1f, 2f, 5f, 10f).map { it * pow }.last { it <= target }
     return ScaleBar(imagePx = um / fieldWidthUm * imageWidth, label = "${um.fmt(if (um < 1) 1 else 0)} µm")
-}
-
-@Composable
-private fun CameraPreview(vm: CaptureViewModel) {
-    val owner = LocalLifecycleOwner.current
-    var view by remember { mutableStateOf<PreviewView?>(null) }
-    var ring by remember { mutableStateOf<androidx.compose.ui.geometry.Offset?>(null) }
-    val ringColor = MaterialTheme.colorScheme.primary
-    LaunchedEffect(view) { view?.let { vm.camera.bind(owner, it) } }
-    androidx.compose.runtime.DisposableEffect(Unit) { onDispose { vm.camera.unbind() } }
-    Box(
-        Modifier.fillMaxSize().pointerInput(Unit) {
-            detectTapGestures { p -> ring = p; vm.camera.focusAt(p.x, p.y) }
-        },
-    ) {
-        AndroidView(
-            factory = { ctx -> PreviewView(ctx).apply { scaleType = PreviewView.ScaleType.FIT_CENTER; implementationMode = PreviewView.ImplementationMode.COMPATIBLE }.also { view = it } },
-            modifier = Modifier.fillMaxSize().semantics { contentDescription = "Vista previa de la cámara. Toca para enfocar." },
-        )
-        ring?.let { p ->
-            androidx.compose.foundation.Canvas(Modifier.fillMaxSize()) {
-                drawCircle(ringColor, radius = 28.dp.toPx(), center = p, style = androidx.compose.ui.graphics.drawscope.Stroke(2.dp.toPx()))
-            }
-        }
-    }
 }
 
 @Composable

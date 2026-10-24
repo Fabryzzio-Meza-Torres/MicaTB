@@ -123,6 +123,23 @@ class CameraSource(private val context: Context) {
         /** Decodifica un JPEG aplicando la rotacion EXIF, para que la imagen quede derecha. */
         fun decodeUpright(file: File): Bitmap = decodeUpright(file.readBytes())
 
+        /** Version reducida (lado mayor cerca de [maxSide]) para miniaturas, con la rotacion EXIF aplicada. */
+        fun decodeUprightScaled(file: File, maxSide: Int): Bitmap {
+            val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+            BitmapFactory.decodeFile(file.path, bounds)
+            var sample = 1
+            while (maxOf(bounds.outWidth, bounds.outHeight) / (sample * 2) >= maxSide) sample *= 2
+            val raw = checkNotNull(BitmapFactory.decodeFile(file.path, BitmapFactory.Options().apply { inSampleSize = sample })) { "no se pudo leer ${file.name}" }
+            val degrees = when (ExifInterface(file.path).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> 90f
+                ExifInterface.ORIENTATION_ROTATE_180 -> 180f
+                ExifInterface.ORIENTATION_ROTATE_270 -> 270f
+                else -> 0f
+            }
+            if (degrees == 0f) return raw
+            return Bitmap.createBitmap(raw, 0, 0, raw.width, raw.height, Matrix().apply { postRotate(degrees) }, true).also { if (it !== raw) raw.recycle() }
+        }
+
         fun decodeUpright(bytes: ByteArray): Bitmap {
             val raw = checkNotNull(BitmapFactory.decodeByteArray(bytes, 0, bytes.size)) { "no se pudo decodificar la imagen" }
             val orientation = ExifInterface(bytes.inputStream()).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)

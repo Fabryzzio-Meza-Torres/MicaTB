@@ -19,7 +19,9 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.NavType
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import pe.utec.micatb.AppContainer
 import pe.utec.micatb.ui.capture.CaptureScreen
 import pe.utec.micatb.ui.capture.CaptureViewModel
@@ -27,7 +29,10 @@ import pe.utec.micatb.ui.components.DisclaimerStrip
 import pe.utec.micatb.ui.components.MicaIcon
 import pe.utec.micatb.ui.home.HomeScreen
 import pe.utec.micatb.ui.settings.SettingsScreen
-import pe.utec.micatb.ui.session.SessionPlaceholder
+import pe.utec.micatb.ui.results.FieldDetailScreen
+import pe.utec.micatb.ui.results.HistoryScreen
+import pe.utec.micatb.ui.results.SessionResultScreen
+import pe.utec.micatb.ui.session.SessionScreen
 import pe.utec.micatb.ui.theme.MicaIcons
 
 private enum class Dest(val route: String, val label: String, val icon: ImageVector) {
@@ -58,7 +63,7 @@ fun MicaApp(container: AppContainer) {
             NavigationBar(containerColor = MaterialTheme.colorScheme.surfaceContainerLow) {
                 Dest.entries.forEach { d ->
                     NavigationBarItem(
-                        selected = current == d.route,
+                        selected = current == d.route || (current?.startsWith(d.route + "/") == true),
                         onClick = { go(d.route) },
                         icon = { MicaIcon(d.icon, null, tint = androidx.compose.ui.graphics.Color.Unspecified.let { MaterialTheme.colorScheme.onSurface }) },
                         label = { Text(d.label, style = MaterialTheme.typography.labelMedium) },
@@ -78,8 +83,17 @@ fun MicaApp(container: AppContainer) {
                 val vm: CaptureViewModel = viewModel(factory = viewModelFactory { initializer { CaptureViewModel(container) } })
                 CaptureScreen(vm, container)
             }
-            composable(Dest.Session.route) { SessionPlaceholder() }
-            composable(Dest.Results.route) { SessionPlaceholder() }
+            composable(Dest.Session.route) { SessionScreen(container, onOpenResults = { nav.navigate("results/$it") }) }
+            composable(Dest.Results.route) { HistoryScreen(container, onOpen = { nav.navigate("results/$it") }) }
+            composable("results/{sid}", listOf(navArgument("sid") { type = NavType.StringType })) { e ->
+                val sid = e.arguments!!.getString("sid")!!
+                SessionResultScreen(container, sid, onBack = { nav.popBackStack() }, onOpenField = { nav.navigate("results/$sid/$it") })
+            }
+            composable("results/{sid}/{idx}", listOf(navArgument("sid") { type = NavType.StringType }, navArgument("idx") { type = NavType.IntType })) { e ->
+                val sid = e.arguments!!.getString("sid")!!
+                val idx = e.arguments!!.getInt("idx")
+                FieldDetailScreen(container, sid, idx, onBack = { nav.popBackStack() }, onGo = { nav.navigate("results/$sid/$it") { popUpTo("results/$sid") } })
+            }
             composable(Dest.Settings.route) { SettingsScreen(container) }
         }
     }

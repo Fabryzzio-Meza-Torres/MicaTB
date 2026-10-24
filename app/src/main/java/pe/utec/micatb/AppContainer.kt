@@ -34,6 +34,9 @@ class AppContainer(val context: Context) {
     /** Variante activa: null = FP16 de model_config.json. */
     val variantName: String get() = settings.modelVariant ?: "fp16"
 
+    /** Identificador del modelo activo, con su variante cuando no es la predeterminada. */
+    val activeModelId: String get() = settings.modelVariant?.let { "${modelConfig.modelId.removeSuffix("_fp16")}_$it" } ?: modelConfig.modelId
+
     val activeSha256: String
         get() = settings.modelVariant?.let { modelConfig.variants.getValue(it).sha256 } ?: modelConfig.sha256
 

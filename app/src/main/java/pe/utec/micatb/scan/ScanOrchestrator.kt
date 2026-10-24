@@ -26,7 +26,10 @@ import pe.utec.micatb.data.db.SessionStatus
 import pe.utec.micatb.quality.QualityReport
 
 /** Foto capturada, todavia sin analizar. */
-class Frame(val source: PhotoSource, val width: Int, val height: Int)
+class Frame(val source: PhotoSource, val width: Int, val height: Int) {
+    /** Espacio para que el analizador conserve la imagen decodificada entre la calidad y la inferencia. */
+    var cache: Any? = null
+}
 
 interface FrameSource {
     suspend fun capture(fieldIdx: Int, attempt: Int): Frame
@@ -36,6 +39,9 @@ interface FieldAnalyzer {
     suspend fun quality(frame: Frame): QualityReport
 
     suspend fun infer(frame: Frame): InferenceInput
+
+    /** Libera lo que se guardo en [Frame.cache]: una foto de 12 MP ocupa decenas de MB. */
+    fun release(frame: Frame) {}
 }
 
 /** Lo que el orquestador necesita guardar; SessionRepository lo cumple a traves de un adaptador. */
@@ -193,9 +199,11 @@ class ScanOrchestrator(
                 val inference = analyzer.infer(frame)
                 set(ScanPhase.STORING, pos.idx, attempt)
                 store.record(pos.idx, FieldOutcome(FieldStatus.VALID, attempt, qualityJson(q), PhotoInput(frame.source, frame.width, frame.height, attempt), inference))
+                analyzer.release(frame)
                 _state.update { it.copy(validFields = it.validFields + 1) }
                 return true
             }
+            lastFrame?.let { if (it !== frame) analyzer.release(it) }
             lastFrame = frame
             lastQuality = q
 
@@ -212,6 +220,7 @@ class ScanOrchestrator(
             }
             set(ScanPhase.STORING, pos.idx, attempt)
             store.record(pos.idx, FieldOutcome(FieldStatus.INVALID_QUALITY, attempt, qualityJson(lastQuality), PhotoInput(lastFrame.source, lastFrame.width, lastFrame.height, attempt), null))
+            analyzer.release(lastFrame)
             _state.update { it.copy(invalidFields = it.invalidFields + 1) }
             return true
         }

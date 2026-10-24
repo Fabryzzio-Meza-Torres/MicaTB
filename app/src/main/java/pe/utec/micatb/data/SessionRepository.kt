@@ -134,6 +134,9 @@ class SessionRepository(
 
     suspend fun session(id: String): SessionEntity? = db.sessions().get(id)
 
+    /** Posiciones guardadas de los campos de la sesion, para reanudarla. */
+    suspend fun positions(sessionId: String): List<FieldPos> = db.fields().list(sessionId).map { FieldPos(it.idx, it.x, it.y) }
+
     /** Primer indice de campo que aun no tiene resultado final: desde ahi se reanuda. */
     suspend fun resumeIndex(sessionId: String): Int =
         db.fields().list(sessionId).firstOrNull { it.status == FieldStatus.PENDING.name || it.status == FieldStatus.FAILED_MOTION.name || it.status == FieldStatus.FAILED_OTHER.name }?.idx
