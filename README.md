@@ -10,13 +10,13 @@ Equipo: UTEC (computación, bioingeniería, mecatrónica).
 
 | Carpeta | Contenido |
 |---|---|
-| `app/` | Proyecto Android (Kotlin, Compose). Se crea en MT-02. |
+| `app/` | App Android (Kotlin, Compose, Room, CameraX, LiteRT). |
 | `models/` | Modelos TFLite y `model_config.json`, fuente de verdad del contrato del modelo. |
 | `reference/` | Script de Python de referencia y vectores de prueba para la paridad con la app. |
 | `training/` | Notebooks de Kaggle, scripts, tablas y pesos del entrenamiento. |
 | `docs/` | Especificación, contrato del modelo, backlog, decisiones y resultados del entrenamiento (`docs/ref/`). |
 
-Estado del trabajo: `PROGRESS.md`. Reglas de trabajo con el agente: `CLAUDE.md`.
+Estado del trabajo y lo pendiente: `PROGRESS.md`. Sistema visual: `DESIGN.md`. Producto: `PRODUCT.md`. Reglas de trabajo con el agente: `CLAUDE.md`.
 
 ## Modelo
 
@@ -32,6 +32,18 @@ reference/.venv/Scripts/pip install -r reference/requirements.txt
 reference/.venv/Scripts/python reference/reference_infer.py --help
 ```
 
+## Compilar y probar
+
+Requiere Android Studio (JDK incluido) y el SDK 37.
+
+```powershell
+$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
+.\gradlew.bat testDebugUnitTest
+.\gradlew.bat assembleDebug
+.\gradlew.bat connectedDebugAndroidTest   # con un emulador o un celular conectado
+```n
+Se necesita un archivo `local.properties` con `sdk.dir` (no se sube al repositorio).
+
 ## Licencia
 
-Ver `LICENSE`. Los datos de entrenamiento tienen su propia licencia (CC BY 4.0).
+Ver `LICENSE`. Los datos de entrenamiento tienen su propia licencia (CC BY 4.0). La tipografía Barlow se distribuye con licencia OFL (`docs/licenses/OFL-Barlow.txt`).
