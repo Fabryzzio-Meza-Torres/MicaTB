@@ -30,6 +30,8 @@ data class ModelConfig(
     val sha256: String,
     val variants: Map<String, ModelVariant>,
     val domainNote: String,
+    /** Aviso visible en todas las pantallas mientras este modelo este activo. */
+    val displayNotice: String,
     val input: InputSpec,
     val output: OutputSpec,
     val classes: List<String>,
@@ -53,6 +55,7 @@ data class ModelConfig(
                     ModelVariant(variants.getJSONObject(it).getString("file"), variants.getJSONObject(it).getString("sha256"))
                 } ?: emptyMap(),
                 domainNote = o.getString("domain_note"),
+                displayNotice = o.getString("display_notice"),
                 input = InputSpec(
                     width = inp.getInt("width"),
                     height = inp.getInt("height"),

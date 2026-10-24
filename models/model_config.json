@@ -6,6 +6,7 @@
     "int8": { "file": "ecoli_gb_E3s43_352_int8.tflite", "sha256": "da776aab222f7603590a1c2a1af78d7944ae0e543a426992e723ccc02d047234" }
   },
   "task": "detection",
+  "display_notice": "Modelo de demostración con E. coli, no es un detector de TB",
   "domain_note": "Demo Gram E. coli. No es un detector de TB. No usar clinicamente.",
   "input": {
     "width": 352, "height": 352, "content": 320, "border": 16,
