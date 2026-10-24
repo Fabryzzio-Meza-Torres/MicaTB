@@ -1,57 +1,67 @@
 # Progreso
 
-Estado vivo del trabajo. Última actualización: 2026-10-23.
+Estado vivo del trabajo. Última actualización: 2026-10-24.
 
-## Fase 0
+## Resumen
 
-### MT-01 Inspección del modelo y contrato: hecho
+La aplicación completa corre de punta a punta en el emulador (Android 15, x86_64): captura con cámara o imagen, calidad, detección, conteo, sesiones de varios campos con persistencia, resultados, historial, recuperación tras cierre forzado y barrido con movimiento manual, simulado o por protocolo BLE contra un ESP32 simulado.
 
-Qué se hizo:
-- Se inspeccionaron los .tflite FP16 e INT8: entrada [1,3,352,352] float32, salida [1,8,2541] float32, cajas normalizadas, puntajes activados, cuantización 0 en ambos.
-- models/model_config.json con sha256 (coinciden con los del entrenamiento) y las dos definiciones de conteo.
-- reference/reference_infer.py lee esa configuración, comprueba el hash y genera expected.json.
-- reference/test_vectors/expected.json para las 23 imágenes. Comparación con los resultados de Kaggle en las 20 que los tienen: conteo estricto y amplio iguales en 20 de 20, IoU mínimo de cajas 0,984, diferencia máxima de puntaje 0,024.
-- CLAUDE.md y docs/MODEL_CONTRACT.md actualizados a PAD352. Decisiones en docs/DECISIONS.md.
+Lo que falta depende de hardware o de personas, no de código: ver "Pendiente fuera del código".
 
-Qué falta o está abierto:
-- Las 3 imágenes no cuadradas no tienen resultado independiente de Kaggle, solo el del script.
-- La diferencia de puntaje de 0,024 supera la tolerancia de 0,01 del contrato (decisión abierta, ver DECISIONS.md).
-- No se corrió el INT8 sobre los vectores de prueba.
+## Estado por issue
 
-Cómo probarlo:
+| Issue | Estado | Evidencia |
+|---|---|---|
+| MT-01 contrato del modelo | Hecho | models/model_config.json, reference/reference_infer.py, 23 vectores de prueba |
+| MT-02 proyecto base | Hecho | compila, sin permiso INTERNET (manifiesto fusionado y APK) |
+| MT-03 letterbox y preprocesado | Hecho | LetterboxTest, PythonParityTest (píxel a píxel contra Python) |
+| MT-04 detector y paridad | Hecho | DetectorParityTest en emulador: 23 de 23, IoU mínimo 0,997, diferencia de puntaje 0,00005 |
+| MT-05 imagen fija | Hecho | pantalla Captura con muestras y galería; el deslizador cambia el conteo sin reejecutar el modelo |
+| MT-06 cámara | Hecho en emulador | captura, rotación vertical correcta y bloqueo de exposición y balance de blancos; 20 capturas seguidas y orientación en celular real sin probar |
+| MT-07 calidad | Hecho | QualityAnalyzerTest (desenfoque monótono), calibración en Ajustes; umbrales iniciales medidos con imágenes públicas |
+| MT-08 pantalla integrada | Hecho | captura en emulador, JSON y foto original guardados |
+| MT-09 benchmark | Hecho el mecanismo | informe JSON con mediana y p95; cifras de celular pendientes |
+| MT-10 Room | Hecho | SessionRepositoryTest (7 pruebas) incluye persistencia al reabrir y huérfanos tras fallo simulado |
+| MT-11 sesión, resultados, historial | Hecho | sesión de 10 campos en emulador, galería con cajas, detalle con foto original |
+| MT-12 gradación | Hecho | GradingTest; tabla pendiente de validar con la persona especializada |
+| MT-13 orquestador y simulador | Hecho | ScanOrchestratorTest (15 pruebas), incluido un barrido de 50 campos con fallos inyectados sin campos perdidos ni repetidos |
+| MT-14 recuperación | Hecho | cierre forzado a 6 de 10 campos, reanudación: 1 sesión completa, 10 campos únicos, 10 capturas, sin duplicados |
+| MT-15 BLE y simulador | Protocolo y simulador hechos | BleMotionControllerTest (12 pruebas); el transporte GATT real falta |
+| MT-16 calibración con microscopio | Pendiente | requiere el equipo |
+| MT-17 APK de demostración | APK de depuración listo | lista de verificación abajo; la demo en celular real sin probar |
+| MT-18 mejoras | No iniciado | por diseño |
 
-```bash
-python -m venv reference/.venv
-reference/.venv/Scripts/pip install -r reference/requirements.txt
-reference/.venv/Scripts/python reference/reference_infer.py --dir reference/test_vectors --out reference/test_vectors/expected.json
-```
-
-### MT-02 Proyecto Android base: compila y pasa pruebas; falta probar en el celular
-
-Qué se hizo:
-- Entorno instalado en esta PC: Android Studio, command-line tools, SDK (plataformas 36 y 37.0, build-tools 36.0.0, platform-tools) y licencias aceptadas.
-- Proyecto de un módulo (pe.utec.micatb, minSdk 26) con Compose, Material 3 y Navigation Compose, catálogo de versiones, wrapper de Gradle 9.6.0 y assets tomados de models/.
-- Pantalla Home que lee model_config.json y muestra el id del modelo, el aviso "Apoyo al tamizaje, no diagnóstico" y la nota de dominio.
-- Prueba JVM ModelConfigTest (2 pruebas) sobre el model_config.json real.
-
-Evidencia (gradlew.bat test assembleDebug):
-- BUILD SUCCESSFUL; ModelConfigTest: tests=2, failures=0, errors=0.
-- app-debug.apk de 21,8 MB con assets/ecoli_gb_E3s43_352_fp16.tflite, ..._int8.tflite y model_config.json (sin comprimir los tflite).
-- Permiso android.permission.INTERNET ausente en el manifiesto fusionado y en el APK (aapt2 dump permissions solo muestra el permiso interno de AndroidX).
-
-Qué falta (criterio de aceptación incompleto):
-- adb install y abrir la app mostrando el id del modelo: no hay celular conectado (adb devices vacío). Pendiente de que se conecte con depuración USB.
-- Celular de pruebas aún sin definir.
-- La compilación se hizo dentro de OneDrive y no hubo bloqueos de archivos en esta corrida; sigue siendo un riesgo si la sincronización interfiere.
-
-Cómo probarlo:
+## Verificación reproducible
 
 ```powershell
 $env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
-.\gradlew.bat test assembleDebug
-& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" install -r app\build\outputs\apk\debug\app-debug.apk
+.\gradlew.bat testDebugUnitTest            # 58 pruebas JVM
+.\gradlew.bat connectedDebugAndroidTest    # 8 pruebas en el emulador o celular (paridad con el modelo real y base de datos)
+.\gradlew.bat assembleDebug                # app/build/outputs/apk/debug/app-debug.apk
 ```
-## Siguiente
 
-1. Conectar el celular (depuración USB), correr adb devices, instalar el APK y comprobar la pantalla Home. Con eso se cierra MT-02.
-2. No pasar a MT-03 sin confirmación.
+Última corrida: 58 de 58 pruebas JVM y 8 de 8 instrumentadas en verde.
+
+Emulador usado: AVD micatb (Pixel 6, Android 35, x86_64, 2 GB de RAM, cámara trasera de escena virtual).
+
+## Qué se midió en el emulador y qué no vale
+
+- Los tiempos del benchmark en el emulador (por ejemplo, preproceso de 37 ms e inferencia de 51 ms en una corrida) no son latencia de celular. La latencia real se mide en el celular y se anota aquí.
+- La vista previa de la cámara salió negra en reposo con el emulador sin ventana, pero la captura sí funcionó. Se trata como limitación del emulador hasta verlo en un celular.
+
+## Pendiente fuera del código
+
+1. Celular de pruebas: modelo y versión de Android sin definir. Con él: instalar el APK, repetir la paridad con ARM (`connectedDebugAndroidTest`), medir latencia (Ajustes > Medir latencia), 20 capturas seguidas y orientación EXIF.
+2. Microscopio y adaptador: calibrar la nitidez (Ajustes > Calidad de imagen) y el ancho del campo para la barra de escala; fijar el tiempo de estabilización; pase cualitativo con 20 a 30 campos reales.
+3. Firmware ESP32: acordar el UUID del servicio GATT y el protocolo de SPEC sección 5. Falta escribir el transporte GATT sobre la interfaz BleTransport; no se hizo sin hardware para probarlo.
+4. Tabla de gradación: validarla con la persona especializada del equipo antes de mostrarla.
+5. Modelo de TB: entra cambiando models/model_config.json (clases, conteo, umbrales y aviso visible).
+6. Decisión sobre INT8 contra FP16: se toma con el benchmark en el celular.
+
+## Lista de verificación de la demo (MT-17)
+
+- Batería cargada y brillo bajo, modo avión activo (la app no tiene permiso de Internet).
+- Instalar el APK de depuración: `adb install -r app\build\outputs\apk\debug\app-debug.apk`.
+- Plan B sin microscopio: Sesión > Imágenes > Muestras, o Captura > Imagen.
+- Orden sugerido: Inicio, Captura con una muestra densa, una sesión de 10 campos, Resultados, detalle de un campo con la foto original.
+- Decir en voz alta que es apoyo al tamizaje, no diagnóstico, y que el modelo es de E. coli.
