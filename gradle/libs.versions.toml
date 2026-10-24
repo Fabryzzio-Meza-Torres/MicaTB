@@ -6,6 +6,12 @@ navigation = "2.10.2"
 activityCompose = "1.13.0"
 junit = "4.13.2"
 orgJson = "20240303"
+litert = "2.3.0"
+camerax = "1.6.2"
+lifecycle = "2.11.0"
+exif = "1.4.2"
+testRunner = "1.7.0"
+testExt = "1.3.0"
 
 [libraries]
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
@@ -15,6 +21,16 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 junit = { module = "junit:junit", version.ref = "junit" }
 org-json = { module = "org.json:json", version.ref = "orgJson" }
+litert = { module = "com.google.ai.edge.litert:litert", version.ref = "litert" }
+androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "camerax" }
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "camerax" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+androidx-exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref = "exif" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "testRunner" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "testExt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
