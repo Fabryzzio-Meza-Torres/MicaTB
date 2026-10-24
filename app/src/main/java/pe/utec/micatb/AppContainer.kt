@@ -2,8 +2,12 @@ package pe.utec.micatb
 
 import android.content.Context
 import android.graphics.Bitmap
+import androidx.room.Room
+import java.io.File
 import pe.utec.micatb.data.CaptureStorage
+import pe.utec.micatb.data.SessionRepository
 import pe.utec.micatb.data.SettingsStore
+import pe.utec.micatb.data.db.MicaDatabase
 import pe.utec.micatb.domain.AppConfig
 import pe.utec.micatb.domain.ModelConfig
 import pe.utec.micatb.inference.BitmapRows
@@ -21,6 +25,8 @@ class AppContainer(val context: Context) {
     val appConfig: AppConfig = context.assets.open("app_config.json").use { AppConfig.parse(it.readBytes().decodeToString()) }
     val settings = SettingsStore(context)
     val storage = CaptureStorage(context)
+    val database: MicaDatabase = Room.databaseBuilder(context, MicaDatabase::class.java, "mica.db").build()
+    val sessions = SessionRepository(database, File(context.filesDir, "sessions"))
 
     private var detector: LiteRtDetector? = null
     private var detectorKey: Pair<String?, Int>? = null
