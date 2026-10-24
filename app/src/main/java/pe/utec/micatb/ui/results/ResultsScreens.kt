@@ -82,6 +82,9 @@ import pe.utec.micatb.ui.theme.Mica
 import pe.utec.micatb.ui.theme.MicaIcons
 import pe.utec.micatb.ui.theme.tabular
 
+/** "1 contado", "2 contados". */
+internal fun counted(n: Int) = if (n == 1) "1 contado" else "$n contados"
+
 private val dateFmt: DateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
 
 private fun statusText(s: SessionStatus) = when (s) {
@@ -95,7 +98,7 @@ private fun statusText(s: SessionStatus) = when (s) {
 
 @Composable
 private fun BackHeader(title: String, onBack: () -> Unit) {
-    Row(Modifier.fillMaxWidth().padding(start = 4.dp, end = 16.dp).height(56.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(Modifier.fillMaxWidth().height(56.dp), verticalAlignment = Alignment.CenterVertically) {
         Box(Modifier.size(48.dp).clickable(onClick = onBack).semantics { contentDescription = "Volver" }, contentAlignment = Alignment.Center) { MicaIcon(MicaIcons.Back, null) }
         Text(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(start = 4.dp))
     }
@@ -115,21 +118,21 @@ fun HistoryScreen(container: AppContainer, onOpen: (String) -> Unit, modifier: M
             }
         } else {
             LazyColumn(Modifier.fillMaxSize()) {
-                items(sessions, key = { it.id }) { SessionRow(it) { onOpen(it.id) } }
+                items(sessions, key = { it.id }) { SessionRow(it, Modifier.padding(horizontal = 16.dp)) { onOpen(it.id) } }
             }
         }
     }
 }
 
 @Composable
-fun SessionRow(s: SessionSummary, onClick: () -> Unit) {
-    Column(Modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp)) {
+fun SessionRow(s: SessionSummary, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    Column(modifier.fillMaxWidth().clickable(onClick = onClick)) {
         HairlineDivider()
         Row(Modifier.fillMaxWidth().padding(vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(s.label ?: "Sin identificador", style = MaterialTheme.typography.titleMedium)
                 Text("${dateFmt.format(Date(s.createdAt))} · ${statusText(s.status)}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text("${s.validFields} de ${s.fields} campos válidos · ${s.countStrict} contados", style = MaterialTheme.typography.bodyMedium.tabular)
+                Text("${s.validFields} de ${s.fields} campos válidos · ${counted(s.countStrict)}", style = MaterialTheme.typography.bodyMedium.tabular)
             }
             MicaIcon(MicaIcons.Chevron, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
         }
@@ -160,10 +163,10 @@ fun SessionResultScreen(container: AppContainer, sessionId: String, onBack: () -
     val grade = Grading.grade(container.appConfig.grading, counts, container.appConfig.session.minValidFieldsForGrade)
     var notes by remember(d.session.id) { mutableStateOf(d.session.notes.orEmpty()) }
 
-    LazyVerticalGrid(GridCells.Fixed(3), modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+    LazyVerticalGrid(GridCells.Fixed(3), modifier.fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
         item(span = { GridItemSpan(maxLineSpan) }) { BackHeader(d.session.sampleLabel ?: "Sesión sin identificador", onBack) }
         item(span = { GridItemSpan(maxLineSpan) }) {
-            Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text("${dateFmt.format(Date(d.session.createdAt))} · ${statusText(SessionStatus.valueOf(d.session.status))}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Segmented(listOf(CountMode.STRICT to "Estricto", CountMode.BROAD to "Amplio"), mode, { mode = it; container.settings.countMode = it })
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -180,7 +183,7 @@ fun SessionResultScreen(container: AppContainer, sessionId: String, onBack: () -
         }
         items(d.fields, key = { it.field.id }) { f -> FieldTile(container, f, r) { onOpenField(f.field.idx) } }
         item(span = { GridItemSpan(maxLineSpan) }) {
-            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(Modifier.padding(vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 HairlineDivider()
                 OutlinedTextField(value = notes, onValueChange = { notes = it }, label = { Text("Notas") }, modifier = Modifier.fillMaxWidth(), minLines = 2)
                 MicaOutlinedButton({ scope.launch { container.sessions.setNotes(sessionId, notes) } }, Modifier.fillMaxWidth()) { Text("Guardar nota", style = MaterialTheme.typography.labelLarge) }

@@ -1,5 +1,6 @@
 package pe.utec.micatb.ui.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import pe.utec.micatb.ui.results.SessionRow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -27,6 +32,8 @@ import pe.utec.micatb.ui.theme.tabular
 @Composable
 fun HomeScreen(container: AppContainer, onNavigate: (String) -> Unit, modifier: Modifier = Modifier) {
     val cfg = container.modelConfig
+    val sessions by container.sessions.observeSummaries().collectAsStateWithLifecycle(emptyList())
+    val unfinished by produceState(0, sessions) { value = container.sessions.unfinished().size }
     Column(
         modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 20.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
@@ -44,6 +51,21 @@ fun HomeScreen(container: AppContainer, onNavigate: (String) -> Unit, modifier: 
             MicaButton(onClick = { onNavigate("session") }, Modifier.fillMaxWidth().height(56.dp)) { Text("Nueva sesión", style = MaterialTheme.typography.labelLarge) }
             MicaOutlinedButton(onClick = { onNavigate("capture") }, Modifier.fillMaxWidth().height(56.dp)) { Text("Capturar un campo suelto", style = MaterialTheme.typography.labelLarge) }
             MicaOutlinedButton(onClick = { onNavigate("results") }, Modifier.fillMaxWidth().height(56.dp)) { Text("Historial de sesiones", style = MaterialTheme.typography.labelLarge) }
+        }
+
+        if (unfinished > 0) {
+            Column(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.secondaryContainer, MaterialTheme.shapes.small).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(if (unfinished == 1) "Hay una sesión sin terminar" else "Hay $unfinished sesiones sin terminar", style = MaterialTheme.typography.titleMedium)
+                Text("Puedes reanudarla desde el primer campo que no tiene resultado.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSecondaryContainer)
+                MicaOutlinedButton(onClick = { onNavigate("session") }, Modifier.fillMaxWidth()) { Text("Ir a Sesión", style = MaterialTheme.typography.labelLarge) }
+            }
+        }
+
+        if (sessions.isNotEmpty()) {
+            Column {
+                Legend("Últimas sesiones", Modifier.padding(bottom = 8.dp))
+                sessions.take(3).forEach { SessionRow(it) { onNavigate("results/${it.id}") } }
+            }
         }
 
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {

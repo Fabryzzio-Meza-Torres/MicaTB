@@ -48,3 +48,9 @@ JDK: el que trae Android Studio (JBR 25) vía JAVA_HOME; el build funcionó con 
 Assets: app/build.gradle.kts añade ../models como directorio de assets, así models/ sigue siendo la única fuente del modelo y de model_config.json. noCompress para tflite. El APK de depuración incluye FP16, INT8 y la configuración (21,8 MB).
 Parseo de la configuración: org.json de Android en la app y la librería org.json:json solo en pruebas JVM (las pruebas leen el model_config.json real de models/).
 Descartado: aplicar kotlin-android (según la guía oficial, el Kotlin integrado de AGP 9 lo reemplaza) y un JDK 17 aparte (el build funcionó con el JBR).
+## 2026-10-24 Umbrales iniciales de calidad de imagen
+
+Contexto: con nitidez minima 40 y brillo maximo 215, la sesion de prueba marco "calidad insuficiente" en 15 de las 23 imagenes buenas del conjunto publico (nitidez 19 a 62, brillo 142 a 216).
+Medicion (mismo algoritmo que QualityAnalyzer, 23 imagenes de reference/test_vectors): originales con nitidez entre 19,5 y 62,3; con desenfoque gaussiano sigma=1, entre 8,8 y 17,4; con sigma=2, entre 5,3 y 10,9.
+Decision: nitidez minima 15 (0 de 23 originales rechazadas; detecta 18 de 23 con sigma=1 y 23 de 23 con sigma=2) y brillo maximo 235. Siguen marcados como no calibrados: salen de imagenes publicas, no de fotos del celular sobre el ocular. La calibracion con el microscopio real esta en Ajustes > Calidad de imagen.
+Descartado: dejar 40 (rechaza imagenes buenas) y un umbral solo por brillo.

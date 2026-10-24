@@ -116,12 +116,16 @@ private fun SetupPanel(vm: SessionViewModel) {
 
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Legend("Movimiento de la lámina")
-            Segmented(listOf(MotionMode.MANUAL to "Manual", MotionMode.SIMULATED to "Simulado"), setup.motion, vm::setMotion)
+            Segmented(listOf(MotionMode.MANUAL to "Manual", MotionMode.SIMULATED to "Simulado", MotionMode.BLE_SIM to "BLE sim."), setup.motion, vm::setMotion)
             Text(
-                if (setup.motion == MotionMode.MANUAL) "La app te pide mover la lámina al campo siguiente y esperas a pulsar Continuar." else "El movimiento se simula con retardos, para ensayar sin el equipo motorizado.",
+                when (setup.motion) {
+                    MotionMode.MANUAL -> "La app te pide mover la lámina al campo siguiente y esperas a pulsar Continuar."
+                    MotionMode.SIMULATED -> "El movimiento se simula con retardos, para ensayar sin el equipo motorizado."
+                    MotionMode.BLE_SIM -> "Corre el protocolo BLE completo (ACK, reintentos, vigilancia por PING) contra un controlador ESP32 simulado."
+                },
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            Text("Motorizado por BLE: requiere el controlador del equipo, aún pendiente.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("Motorizado por BLE real: requiere el controlador del equipo y el acuerdo de UUID con el firmware, aún pendientes.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
 
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -247,7 +251,7 @@ private fun FieldLine(row: FieldRow) {
             Text("Campo ${row.idx + 1}", Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge.tabular)
             Text(
                 when (row.status) {
-                    FieldStatus.VALID -> "${row.countStrict ?: 0} contados"
+                    FieldStatus.VALID -> pe.utec.micatb.ui.results.counted(row.countStrict ?: 0)
                     FieldStatus.INVALID_QUALITY -> "Sin calidad"
                     FieldStatus.FAILED_MOTION -> "Movimiento fallido"
                     FieldStatus.FAILED_OTHER -> "Captura fallida"
@@ -268,7 +272,7 @@ private fun phaseText(s: ScanState): String = when (s.phase) {
     ScanPhase.INFERRING -> "Contando bacilos"
     ScanPhase.STORING -> "Guardando el campo"
     ScanPhase.RETRYING -> "Calidad insuficiente, volviendo a capturar"
-    ScanPhase.PAUSED -> if (s.message == "En pausa") "En pausa. El siguiente movimiento no empieza hasta reanudar." else "En pausa: ${s.message}"
+    ScanPhase.PAUSED -> if (s.message == "En pausa") "En pausa. El siguiente movimiento no empieza hasta reanudar." else "En pausa. Elige cómo continuar."
     ScanPhase.ERROR -> "Error: ${s.message}"
     ScanPhase.CANCELLING -> "Cancelando"
     ScanPhase.CANCELLED -> "El movimiento se detuvo. Los campos guardados se conservan."

@@ -30,9 +30,11 @@ import pe.utec.micatb.scan.ScanConfig
 import pe.utec.micatb.scan.ScanOrchestrator
 import pe.utec.micatb.scan.ScanState
 import pe.utec.micatb.scan.SimulatedMotionController
+import pe.utec.micatb.scan.ble.BleMotionController
+import pe.utec.micatb.scan.ble.SimulatedEsp32
 import pe.utec.micatb.scan.generateSnakePath
 
-enum class MotionMode { MANUAL, SIMULATED }
+enum class MotionMode { MANUAL, SIMULATED, BLE_SIM }
 
 enum class ImageSource { CAMERA, SAMPLES }
 
@@ -102,7 +104,8 @@ class SessionViewModel(private val c: AppContainer) : ViewModel() {
             try {
                 val cols = 5
                 val rows = ceil(s.fields / cols.toDouble()).toInt()
-                val positions = generateSnakePath(cols, rows, 1, 1).take(s.fields)
+                val step = if (s.motion == MotionMode.BLE_SIM) 1000 else 1 // pasos del motor simulado
+                val positions = generateSnakePath(cols, rows, step, step).take(s.fields)
                 val config = JSONObject()
                     .put("fields", s.fields).put("motion", s.motion.name).put("source", s.source.name).put("cols", cols)
                     .put("settle_ms", c.appConfig.session.settleMs).put("max_retries", c.appConfig.session.maxRetries)
@@ -138,7 +141,11 @@ class SessionViewModel(private val c: AppContainer) : ViewModel() {
 
     private fun launchScan(id: String, s: SetupState, positions: List<FieldPos>, startIndex: Int) {
         val manualController = if (s.motion == MotionMode.MANUAL) ManualMotionController() else null
-        val motion: MotionController = manualController ?: SimulatedMotionController(moveDelayMs = 500)
+        val motion: MotionController = when (s.motion) {
+            MotionMode.MANUAL -> manualController!!
+            MotionMode.SIMULATED -> SimulatedMotionController(moveDelayMs = 500)
+            MotionMode.BLE_SIM -> BleMotionController(SimulatedEsp32(viewModelScope), viewModelScope)
+        }
         val frames: FrameSource = when (s.source) {
             ImageSource.CAMERA -> CameraFrameSource(camera, c.storage.dir("tmp"))
             ImageSource.SAMPLES -> SampleFrameSource(c.context)

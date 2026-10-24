@@ -136,6 +136,15 @@ class ScanOrchestrator(
     private suspend fun run(positions: List<FieldPos>, startIndex: Int) {
         try {
             store.setSessionStatus(SessionStatus.RUNNING)
+            try {
+                motion.connect()
+                motion.home()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                fatal(startIndex, "Preparacion del movimiento: ${e.message ?: "error"}")
+                return
+            }
             for (i in startIndex until positions.size) {
                 if (pauseRequested) {
                     pauseRequested = false

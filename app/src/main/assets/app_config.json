@@ -1,10 +1,10 @@
 {
-  "_note": "Constantes de dominio de la app (no del modelo). Los valores marcados 'a calibrar' se ajustan midiendo con el microscopio real.",
+  "_note": "Constantes de dominio de la app (no del modelo). Los valores de calidad son iniciales, medidos con las imagenes publicas de reference/test_vectors (nitidez 19 a 62, brillo 142 a 216; desenfoque suave sigma=1 da 9 a 17). Hay que recalibrarlos con fotos del microscopio real (Ajustes > Calidad de imagen).",
   "quality": {
     "analysis_size": 512,
-    "sharpness_min": 40.0,
+    "sharpness_min": 15.0,
     "brightness_min": 45.0,
-    "brightness_max": 215.0,
+    "brightness_max": 235.0,
     "clipped_max": 0.08,
     "calibrated": false
   },
