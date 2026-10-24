@@ -92,7 +92,7 @@ Objetivo: comprobar que la app calcula lo mismo que Python con el mismo archivo 
 - Si falla: no se avanza. Revisar en este orden: RGB contra BGR, escala 0 a 1, unidades de las cajas, deshacer letterbox y borde, rotación EXIF, orden de clases.
 - Prueba aparte, hecha en Kaggle y no en la app: ultralytics contra el .tflite exportado en las mismas 300 imágenes. Resultado: mismo conteo en 300 de 300 y cajas dentro de 0,05 px.
 
-Nota de MT-01 sobre la tolerancia de puntaje: al comparar reference_infer.py (Windows, ai-edge-litert 2.2.0) con los resultados que Kaggle generó con el mismo archivo FP16, los conteos estricto y amplio coinciden en 20 de 20 imágenes y las cajas emparejadas tienen IoU mínimo 0,984, pero los puntajes difieren hasta 0,024 (una detección con puntaje cercano a 0,5). Entre dos intérpretes de escritorio ya se supera el 0,01 del criterio, así que es probable que el celular también lo supere. Está pendiente decidir en MT-04, con una medición en el celular, si se ensancha la tolerancia de puntaje. El criterio de arriba no se ha cambiado.
+Resultado de MT-04 (emulador x86_64, Android 35, LiteRT 2.3.0): 23 de 23 imágenes con conteo estricto y amplio idénticos, IoU mínimo 0,997 y diferencia máxima de puntaje 0,00005. El criterio se cumple sin cambios. Pendiente repetirlo en un celular real con ARM.
 
 ## 7. Protocolo de benchmark en el celular
 

@@ -35,10 +35,11 @@ Contexto: el repositorio vive en C:\Users\ASUS\OneDrive\Documentos\MicaTB y trae
 Decisión: *.tflite, *.pt y *.onnx van por Git LFS (.gitattributes). Los notebooks de Kaggle se importan sin salidas (kaggle kernels pull no las trae) más una copia ejecutada de ecoli-final. No se migra la historia git del entrenamiento (rama ecoli-yolo-fase1-training del repositorio de trabajo, 653 MB, sin subir).
 Riesgo abierto: Gradle dentro de OneDrive. Si la sincronización bloquea build/ o .gradle/, pausarla durante las compilaciones o mover el proyecto a una ruta fuera de OneDrive.
 
-## 2026-10-23 Tolerancia de puntaje en la paridad (ABIERTA)
+## 2026-10-23 Tolerancia de puntaje en la paridad (CERRADA)
 
-Contexto: MODEL_CONTRACT.md sección 6 exige diferencia de puntaje menor o igual a 0,01. Entre reference_infer.py (Windows) y los resultados de Kaggle con el mismo FP16 hay diferencias de hasta 0,024 en una detección con puntaje cercano a 0,5, con conteos y cajas iguales.
-Decisión: no se cambia el criterio todavía. Se decide en MT-04 con la medición en el celular. Si hace falta, ensanchar el puntaje a unos 0,03 y mantener conteo idéntico e IoU mayor o igual a 0,95. Pendiente de confirmación del equipo.
+Contexto: MODEL_CONTRACT.md sección 6 exige diferencia de puntaje menor o igual a 0,01. En MT-01, reference_infer.py (Windows) difería hasta 0,024 de los resultados que Kaggle generó con el mismo FP16.
+Resultado: la prueba instrumentada de la app (DetectorParityTest, LiteRT 2.3.0, emulador x86_64 Android 35) contra expected.json de reference_infer.py da, en las 23 imágenes, conteo estricto y amplio idénticos, IoU mínimo 0,997 y diferencia máxima de puntaje 0,00005. La diferencia de 0,024 era entre el intérprete de Kaggle y el de escritorio, no entre la app y la referencia.
+Decisión: el criterio del contrato (IoU mayor o igual a 0,95, puntaje dentro de 0,01) se mantiene sin cambios y se cumple. Falta repetirlo en un celular real con ARM.
 ## 2026-10-23 Toolchain Android (MT-02)
 
 Contexto: versiones verificadas en la documentación oficial el mismo día (developer.android.com y kotlinlang.org), no de memoria.
