@@ -1,0 +1,32 @@
+{
+  "_note": "Constantes de dominio de la app (no del modelo). Los valores marcados 'a calibrar' se ajustan midiendo con el microscopio real.",
+  "quality": {
+    "analysis_size": 512,
+    "sharpness_min": 40.0,
+    "brightness_min": 45.0,
+    "brightness_max": 215.0,
+    "clipped_max": 0.08,
+    "calibrated": false
+  },
+  "session": {
+    "default_fields": 10,
+    "settle_ms": 800,
+    "max_retries": 2,
+    "on_retries_exhausted": "pause",
+    "min_valid_fields_for_grade": 10
+  },
+  "capture": {
+    "jpeg_quality": 95
+  },
+  "grading": {
+    "_note": "Tabla de demostracion por promedio de bacilos por campo. Pendiente de validar con la persona especializada del equipo; no es diagnostica.",
+    "label": "Gradación de demostración, no diagnóstica",
+    "bands": [
+      { "max_mean_per_field": 0.0, "grade": "0", "text": "Sin bacilos contados" },
+      { "max_mean_per_field": 0.5, "grade": "1", "text": "Pocos por campo" },
+      { "max_mean_per_field": 2.0, "grade": "2", "text": "Algunos por campo" },
+      { "max_mean_per_field": 10.0, "grade": "3", "text": "Varios por campo" },
+      { "max_mean_per_field": 1000000.0, "grade": "4", "text": "Muchos por campo" }
+    ]
+  }
+}
