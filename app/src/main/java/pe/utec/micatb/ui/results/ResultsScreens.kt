@@ -85,7 +85,7 @@ import pe.utec.micatb.ui.theme.tabular
 /** "1 contado", "2 contados". */
 internal fun counted(n: Int) = if (n == 1) "1 contado" else "$n contados"
 
-private val dateFmt: DateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
+private val dateFmt: DateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, java.util.Locale.forLanguageTag("es"))
 
 private fun statusText(s: SessionStatus) = when (s) {
     SessionStatus.CREATED -> "Creada"

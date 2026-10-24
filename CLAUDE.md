@@ -4,6 +4,10 @@ App Android offline de apoyo al tamizaje microscópico. El celular va acoplado a
 
 Equipo: UTEC (Fabryzzio en computación, Maritza en bioingeniería, Oswaldo en mecatrónica). Proyecto para una competencia internacional con jurado clínico. La demo usa E. coli en láminas Gram fijadas porque el laboratorio solo maneja organismos de bioseguridad nivel 1. Los resultados de TB se muestran solo con imágenes públicas y la validación con láminas reales está pendiente.
 
+## Estado
+
+Fases 0 a 3 hechas y verificadas en emulador; BLE con simulador. Ver PROGRESS.md para el estado por issue y lo pendiente (celular, microscopio, firmware).
+
 ## Prioridad actual
 
 1. Que funcione la rebanada cámara, IA y resultado en el celular real (Fase 1 de docs/SPEC.md). Es lo que más importa.

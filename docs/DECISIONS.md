@@ -54,3 +54,13 @@ Contexto: con nitidez minima 40 y brillo maximo 215, la sesion de prueba marco "
 Medicion (mismo algoritmo que QualityAnalyzer, 23 imagenes de reference/test_vectors): originales con nitidez entre 19,5 y 62,3; con desenfoque gaussiano sigma=1, entre 8,8 y 17,4; con sigma=2, entre 5,3 y 10,9.
 Decision: nitidez minima 15 (0 de 23 originales rechazadas; detecta 18 de 23 con sigma=1 y 23 de 23 con sigma=2) y brillo maximo 235. Siguen marcados como no calibrados: salen de imagenes publicas, no de fotos del celular sobre el ocular. La calibracion con el microscopio real esta en Ajustes > Calidad de imagen.
 Descartado: dejar 40 (rechaza imagenes buenas) y un umbral solo por brillo.
+## 2026-10-24 Persistencia, API de LiteRT y librerias (MT-04 a MT-15)
+
+LiteRT 2.3.0: el Interpreter de CPU vive en org.tensorflow.lite.Interpreter (paquete de compatibilidad), no en com.google.ai.edge.litert; CompiledModel esta en litert-api. Se usa el Interpreter con 4 hilos y XNNPACK por defecto. La paridad con el .tflite real pasa en el emulador. GPU queda como experimento posterior (RF27).
+Room 2.8.5 con KSP 2.3.12 funciona bajo AGP 9.4 y Kotlin integrado. Esquema de docs/SPEC.md seccion 7, sin exportar el esquema. Integridad: foto primero (temporal y renombrar), fila despues en una transaccion; si falla, se borra la foto.
+CameraX 1.6.2 con Camera2Interop para bloquear exposicion y balance de blancos; el enfoque se fija con enfoque tactil sin cancelacion automatica. Orientacion bloqueada en vertical; la rotacion EXIF se aplica al decodificar.
+Remuestreo propio: Preprocess reproduce cv2.INTER_LINEAR en Kotlin puro leyendo por filas, para que coincida con la referencia en Python y no depender de OpenCV ni de createScaledBitmap.
+Plan B de la demo: seis muestras del conjunto publico (CC BY 4.0) en assets/samples, usables en Captura y como fuente de imagenes de una sesion.
+Barrido: el orquestador usa interfaces (MotionController, FrameSource, FieldAnalyzer, ScanStore) para probarse en JVM con fallos inyectados; ManualMotionController, SimulatedMotionController y BleMotionController sobre SimulatedEsp32 cumplen la misma interfaz. Preparar el movimiento (conectar y HOME) ocurre en la fase PREPARING.
+BLE: se implementa el protocolo y su simulador; el transporte GATT real no se escribe sin hardware ni UUID acordado. Tras perdida de conexion o timeout, el controlador detiene y exige HOME antes del siguiente movimiento.
+Vista previa de la camara: en el emulador sin ventana salio negra en reposo aunque la captura funciono; se deja anotado como limitacion del emulador, sin confirmar en celular.
