@@ -33,6 +33,7 @@ Radios de 2, 4 (etiquetas), 8 (botones, contenedores) y 12 dp (tarjetas). Sin so
 
 ## Componentes (ui/components)
 
+- Logo e ícono (res/drawable/ic_launcher_*.xml, adaptativo con versión monocroma): campo de microscopio sobre azul marino, aro y retícula en teal claro y un bacilo rojo dentro de su caja de detección, la misma acción que hace la app. Es una marca propia dibujada en vectores; LogoMark de la cabecera reutiliza el mismo arte.
 - AppHeader: logo, "MicaTB", sección en mono y el chip "100 % offline" (estado real: la app no tiene Internet).
 - DisclaimerStrip: franja cian bajo la cabecera, siempre visible: "Apoyo al tamizaje, no diagnóstico" y el aviso del modelo activo (viene de model_config.json).
 - MicaCard, MetricBox, Tag, PositiveTag, ReviewTag, CleanTag, StatusChip, LogoMark.

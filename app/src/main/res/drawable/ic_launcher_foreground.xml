@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Campo de microscopio con retícula; dentro, un bacilo detectado (rojo) en su caja de detección.
+  Las formas viven en la zona segura central (círculo de 66 dp) del lienzo adaptativo de 108 dp.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Aro del ocular -->
+    <path
+        android:pathData="M28,54a26,26 0 1,0 52,0a26,26 0 1,0 -52,0"
+        android:strokeWidth="3.5"
+        android:strokeColor="#6CD7D8" />
+
+    <!-- Marcas de la retícula -->
+    <path
+        android:pathData="M54,28L54,34M54,74L54,80M28,54L34,54M74,54L80,54"
+        android:strokeWidth="3"
+        android:strokeColor="#6CD7D8"
+        android:strokeLineCap="round" />
+
+    <!-- Bacilos sin contar (tenues) -->
+    <group android:pivotX="45" android:pivotY="36" android:rotation="25">
+        <path
+            android:fillColor="#6CD7D8"
+            android:fillAlpha="0.4"
+            android:pathData="M40,33.8h10a2.2,2.2 0 0,1 0,4.4h-10a2.2,2.2 0 0,1 0,-4.4z" />
+    </group>
+    <group android:pivotX="66" android:pivotY="71" android:rotation="-20">
+        <path
+            android:fillColor="#6CD7D8"
+            android:fillAlpha="0.4"
+            android:pathData="M61,68.8h10a2.2,2.2 0 0,1 0,4.4h-10a2.2,2.2 0 0,1 0,-4.4z" />
+    </group>
+
+    <!-- Bacilo detectado -->
+    <group android:pivotX="54" android:pivotY="54" android:rotation="-35">
+        <path
+            android:fillColor="#EF4444"
+            android:pathData="M43,49.5h22a4.5,4.5 0 0,1 0,9h-22a4.5,4.5 0 0,1 0,-9z" />
+    </group>
+
+    <!-- Caja de detección: cuatro esquinas -->
+    <path
+        android:pathData="M39,47L39,41L45,41M63,41L69,41L69,47M69,61L69,67L63,67M45,67L39,67L39,61"
+        android:strokeWidth="2.5"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

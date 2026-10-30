@@ -8,7 +8,9 @@
     <application
         android:name=".MicaApplication"
         android:allowBackup="false"
-        android:label="Mica TB"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:label="MicaTB"
         android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
         <activity
             android:name=".MainActivity"

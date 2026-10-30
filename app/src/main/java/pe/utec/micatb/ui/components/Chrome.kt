@@ -1,7 +1,7 @@
 package pe.utec.micatb.ui.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,28 +21,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.painterResource
+import pe.utec.micatb.R
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import pe.utec.micatb.ui.theme.Mica
 
-private val Navy = Color(0xFF102A43)
-private val Teal = Color(0xFF008F91)
-
-/** Marca de la app: retícula teal sobre azul marino con un punto rojo (el bacilo detectado). */
+/** Marca de la app: el mismo arte del ícono del launcher (campo de microscopio, retícula y bacilo detectado). */
 @Composable
 fun LogoMark(size: Dp = 40.dp, modifier: Modifier = Modifier) {
-    Canvas(modifier.size(size).clip(RoundedCornerShape(size / 5)).background(Navy)) {
-        val c = Offset(this.size.width / 2, this.size.height / 2)
-        val r = this.size.width * 0.3f
-        val s = Stroke(width = this.size.width * 0.05f)
-        drawCircle(Teal, r, c, style = s)
-        drawLine(Teal, Offset(c.x, c.y - r * 1.35f), Offset(c.x, c.y + r * 1.35f), s.width)
-        drawLine(Teal, Offset(c.x - r * 1.35f, c.y), Offset(c.x + r * 1.35f, c.y), s.width)
-        drawCircle(Color(0xFFEF4444), this.size.width * 0.07f, Offset(c.x + r * 0.35f, c.y - r * 0.3f))
+    Box(
+        modifier.size(size).clip(RoundedCornerShape(size / 4))
+            .background(Brush.radialGradient(listOf(Color(0xFF1D4A6E), Color(0xFF0B2036)))),
+        contentAlignment = Alignment.Center,
+    ) {
+        // El arte ocupa la zona segura (60 %) del lienzo adaptativo; se amplía para llenar el recuadro.
+        Image(painterResource(R.drawable.ic_launcher_foreground), null, Modifier.size(size).scale(1.5f))
     }
 }
 
