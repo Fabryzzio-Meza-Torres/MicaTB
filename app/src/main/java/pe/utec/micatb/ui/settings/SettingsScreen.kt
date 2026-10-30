@@ -37,8 +37,16 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import pe.utec.micatb.AppContainer
 import pe.utec.micatb.inference.BenchmarkResult
 import pe.utec.micatb.ui.components.ClassGlyph
-import pe.utec.micatb.ui.components.HairlineDivider
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import pe.utec.micatb.ui.components.Legend
+import pe.utec.micatb.ui.components.MicaCard
+import pe.utec.micatb.ui.components.MicaIcon
+import pe.utec.micatb.ui.components.Tag
+import pe.utec.micatb.ui.theme.MicaIcons
 import pe.utec.micatb.ui.components.MicaButton
 import pe.utec.micatb.ui.components.MicaOutlinedButton
 import pe.utec.micatb.ui.components.Reading
@@ -58,11 +66,17 @@ fun SettingsScreen(container: AppContainer, modifier: Modifier = Modifier) {
 
     Column(
         modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(28.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Text("Ajustes técnicos", style = MaterialTheme.typography.headlineSmall)
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("Configuración del sistema", Modifier.weight(1f), style = MaterialTheme.typography.headlineMedium)
+                Tag("REV 0.1.0", container = MaterialTheme.colorScheme.secondaryContainer, content = MaterialTheme.colorScheme.onSecondaryContainer)
+            }
+            Text("Modelo de visión, calidad de imagen y almacenamiento sin conexión.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
 
-        Section("Modelo") {
+        Section("Motor de IA", MicaIcons.Capture, container.variantName.uppercase()) {
             Text(cfg.modelId, style = MaterialTheme.typography.titleMedium.tabular)
             Text(
                 "Huella ${container.activeSha256.take(12)}…${container.activeSha256.takeLast(8)}",
@@ -96,7 +110,7 @@ fun SettingsScreen(container: AppContainer, modifier: Modifier = Modifier) {
             }
         }
 
-        Section("Rendimiento") {
+        Section("Rendimiento", MicaIcons.Play, "${ui.threads} HILOS") {
             SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                 listOf(1, 2, 4).forEachIndexed { i, n ->
                     SegmentedButton(
@@ -122,7 +136,7 @@ fun SettingsScreen(container: AppContainer, modifier: Modifier = Modifier) {
             }
         }
 
-        Section("Calidad de imagen") {
+        Section("Calidad de imagen", MicaIcons.Slide, if (ui.calibrated) "CALIBRADO" else "SIN CALIBRAR") {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 Reading("Nitidez mínima", ui.sharpnessMin.fmt(0), Modifier.weight(1f))
                 Reading("Estado", if (ui.calibrated) "Calibrado" else "Inicial", Modifier.weight(1f), if (ui.calibrated) Mica.stain.ok else Mica.stain.warning)
@@ -134,7 +148,7 @@ fun SettingsScreen(container: AppContainer, modifier: Modifier = Modifier) {
             CalibrationBlock(calib, vm, ui.calibrated)
         }
 
-        Section("Escala del campo") {
+        Section("Escala del campo", MicaIcons.Session, if (ui.fieldWidthUm != null) "CALIBRADA" else "SIN DATO") {
             var text by remember(ui.fieldWidthUm) { mutableStateOf(ui.fieldWidthUm?.let { if (it % 1f == 0f) it.toInt().toString() else it.fmt(1) }.orEmpty()) }
             OutlinedTextField(
                 value = text, onValueChange = { text = it; vm.setFieldWidth(it) },
@@ -145,7 +159,7 @@ fun SettingsScreen(container: AppContainer, modifier: Modifier = Modifier) {
             )
         }
 
-        Section("Privacidad") {
+        Section("Operación y almacén", MicaIcons.Lock, "100 % OFFLINE") {
             Text("La app no tiene permiso de Internet y funciona sin conexión. Las fotos y los resultados se guardan solo en este teléfono, sin datos de pacientes.", style = MaterialTheme.typography.bodyMedium)
             Text("Versión 0.1.0", style = MaterialTheme.typography.bodySmall.tabular, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
@@ -154,11 +168,18 @@ fun SettingsScreen(container: AppContainer, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Section(title: String, content: @Composable () -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        HairlineDivider()
-        Legend(title)
-        content()
+private fun Section(title: String, icon: ImageVector, tag: String, content: @Composable () -> Unit) {
+    MicaCard {
+        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(Modifier.size(36.dp).clip(MaterialTheme.shapes.medium).background(MaterialTheme.colorScheme.secondaryContainer), contentAlignment = Alignment.Center) {
+                    MicaIcon(icon, null, tint = MaterialTheme.colorScheme.primary, size = 20.dp)
+                }
+                Text(title, Modifier.weight(1f), style = MaterialTheme.typography.titleLarge)
+                Tag(tag, container = MaterialTheme.colorScheme.secondaryContainer, content = MaterialTheme.colorScheme.onSecondaryContainer)
+            }
+            content()
+        }
     }
 }
 

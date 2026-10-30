@@ -8,6 +8,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.ui.draw.clip
+import pe.utec.micatb.ui.components.MicaCard
+import pe.utec.micatb.ui.components.MicaTonalButton
+import pe.utec.micatb.ui.components.Tag
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -77,79 +82,120 @@ private fun SetupPanel(vm: SessionViewModel, onOpenCapture: () -> Unit) {
     var hasCamera by remember { mutableStateOf(ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) }
     val ask = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { hasCamera = it }
     val df = remember { DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, java.util.Locale.forLanguageTag("es")) }
+    val motionName = when (setup.motion) { MotionMode.MANUAL -> "Manual"; MotionMode.SIMULATED -> "Simulado"; MotionMode.BLE_SIM -> "BLE simulado" }
 
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 20.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
-        Text("Nueva sesión", style = MaterialTheme.typography.headlineSmall)
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("Centro de escaneo", Modifier.weight(1f), style = MaterialTheme.typography.headlineLarge)
+                Tag(motionName.uppercase(), container = MaterialTheme.colorScheme.secondaryContainer, content = MaterialTheme.colorScheme.onSecondaryContainer)
+            }
+            Text(
+                "${if (setup.source == ImageSource.CAMERA) "Cámara" else "Muestras públicas"} · ${setup.fields} campos en serpentina",
+                style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
 
-        if (unfinished.isNotEmpty()) {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Legend("Sesiones sin terminar")
-                unfinished.forEach { u ->
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        HairlineDivider()
-                        Text(u.label ?: "Sin identificador", style = MaterialTheme.typography.titleMedium)
-                        Text("${df.format(Date(u.createdAt))} · ${u.done} de ${u.total} campos", style = MaterialTheme.typography.bodyMedium.tabular, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            MicaButton({ vm.resumeSession(u.id) }) { Text("Reanudar", style = MaterialTheme.typography.labelLarge) }
-                            TextButton({ vm.discardSession(u.id) }, Modifier.height(56.dp)) { Text("Descartar") }
+        // Pasos del flujo: muestra, enfoque, barrido.
+        val sampleDone = setup.label.isNotBlank()
+        val focusDone = setup.source == ImageSource.SAMPLES || hasCamera
+        Row(Modifier.fillMaxWidth().clip(MaterialTheme.shapes.extraLarge).background(MaterialTheme.colorScheme.surfaceContainerLow).padding(8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            StepChip("Paso 1", "Muestra", sampleDone, Modifier.weight(1f))
+            StepChip("Paso 2", "Enfoque", focusDone, Modifier.weight(1f))
+            StepChip("Paso 3", "Barrido", false, Modifier.weight(1f), muted = true)
+        }
+
+        unfinished.forEach { u ->
+            MicaCard(container = Mica.stain.warningWash, border = androidx.compose.ui.graphics.Color(0xFFFDE68A)) {
+                Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Legend("Sesión sin terminar", color = Mica.stain.warning)
+                    Text(u.label ?: "Sin identificador", style = MaterialTheme.typography.labelLarge.copy(fontFamily = pe.utec.micatb.ui.theme.JetBrainsMono))
+                    Text("${df.format(Date(u.createdAt))} · ${u.done} de ${u.total} campos", style = MaterialTheme.typography.bodySmall.tabular, color = Mica.stain.warning)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        MicaButton({ vm.resumeSession(u.id) }) { Text("Reanudar", style = MaterialTheme.typography.labelLarge) }
+                        TextButton({ vm.discardSession(u.id) }, Modifier.height(48.dp)) { Text("Descartar") }
+                    }
+                }
+            }
+        }
+
+        MicaCard {
+            Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Legend("Identificador de muestra")
+                OutlinedTextField(
+                    value = setup.label, onValueChange = vm::setLabel, singleLine = true, modifier = Modifier.fillMaxWidth(),
+                    placeholder = { Text("M-2025-0001 (opcional)") },
+                    textStyle = MaterialTheme.typography.titleLarge.copy(fontFamily = pe.utec.micatb.ui.theme.JetBrainsMono),
+                    supportingText = { Text("Texto libre y local. No escribas datos de pacientes.") },
+                    shape = MaterialTheme.shapes.medium,
+                )
+                Segmented(listOf(ImageSource.CAMERA to "Cámara", ImageSource.SAMPLES to "Muestras"), setup.source, vm::setSource)
+                if (setup.source == ImageSource.CAMERA) {
+                    PlateFrame(Modifier.fillMaxWidth().height(260.dp).clip(MaterialTheme.shapes.medium)) {
+                        if (hasCamera) CameraPreviewView(vm.camera) else Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("La cámara necesita permiso", style = MaterialTheme.typography.titleMedium, color = androidx.compose.ui.graphics.Color.White)
+                            Spacer(Modifier.height(12.dp))
+                            MicaButton({ ask.launch(Manifest.permission.CAMERA) }) { Text("Permitir cámara", style = MaterialTheme.typography.labelLarge) }
                         }
                     }
+                    Text("Enfoca tocando la vista previa. Al iniciar se bloquean exposición y balance de blancos.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                } else {
+                    Text("Recorre las muestras del conjunto público como campos de la lámina: plan B de la demostración.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
 
-        OutlinedTextField(
-            value = setup.label, onValueChange = vm::setLabel, singleLine = true,
-            label = { Text("Identificador de muestra (opcional)") },
-            supportingText = { Text("Texto libre y local. No escribas datos de pacientes.") },
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Legend("Número de campos")
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                MicaOutlinedButton({ vm.setFields(setup.fields - 1) }, Modifier.size(56.dp)) { Text("−", style = MaterialTheme.typography.titleLarge) }
-                Text(setup.fields.toString(), style = MaterialTheme.typography.headlineMedium.tabular, modifier = Modifier.weight(1f), textAlign = androidx.compose.ui.text.style.TextAlign.Center)
-                MicaOutlinedButton({ vm.setFields(setup.fields + 1) }, Modifier.size(56.dp)) { Text("+", style = MaterialTheme.typography.titleLarge) }
-            }
-        }
-
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Legend("Movimiento de la lámina")
-            Segmented(listOf(MotionMode.MANUAL to "Manual", MotionMode.SIMULATED to "Simulado", MotionMode.BLE_SIM to "BLE sim."), setup.motion, vm::setMotion)
-            Text(
-                when (setup.motion) {
-                    MotionMode.MANUAL -> "La app te pide mover la lámina al campo siguiente y esperas a pulsar Continuar."
-                    MotionMode.SIMULATED -> "El movimiento se simula con retardos, para ensayar sin el equipo motorizado."
-                    MotionMode.BLE_SIM -> "Corre el protocolo BLE completo (ACK, reintentos, vigilancia por PING) contra un controlador ESP32 simulado."
-                },
-                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Text("Motorizado por BLE real: requiere el controlador del equipo y el acuerdo de UUID con el firmware, aún pendientes.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Legend("Imágenes")
-            Segmented(listOf(ImageSource.CAMERA to "Cámara", ImageSource.SAMPLES to "Muestras"), setup.source, vm::setSource)
-            Text(
-                if (setup.source == ImageSource.CAMERA) "Enfoca tocando la vista previa. Al iniciar se bloquean exposición y balance de blancos." else "Recorre las muestras del conjunto público como campos de la lámina: plan B de la demostración.",
-                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            if (setup.source == ImageSource.CAMERA) {
-                PlateFrame(Modifier.fillMaxWidth().height(260.dp)) {
-                    if (hasCamera) CameraPreviewView(vm.camera) else Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("La cámara necesita permiso", style = MaterialTheme.typography.titleMedium)
-                        Spacer(Modifier.height(12.dp))
-                        MicaButton({ ask.launch(Manifest.permission.CAMERA) }) { Text("Permitir cámara", style = MaterialTheme.typography.labelLarge) }
-                    }
+        // Estrategia (número de campos) y movimiento.
+        Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(Modifier.weight(1f).fillMaxSize().clip(MaterialTheme.shapes.extraLarge).background(MaterialTheme.colorScheme.surfaceContainerLow).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Legend("Estrategia")
+                Text("${setup.fields} campos", style = MaterialTheme.typography.headlineSmall.tabular)
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    MicaOutlinedButton({ vm.setFields(setup.fields - 1) }, Modifier.weight(1f)) { Text("−", style = MaterialTheme.typography.titleLarge) }
+                    MicaOutlinedButton({ vm.setFields(setup.fields + 1) }, Modifier.weight(1f)) { Text("+", style = MaterialTheme.typography.titleLarge) }
                 }
+                Text("Patrón serpentina", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Column(Modifier.weight(1f).fillMaxSize().clip(MaterialTheme.shapes.extraLarge).background(MaterialTheme.colorScheme.surfaceContainerLow).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Legend("Movimiento")
+                Text(motionName, style = MaterialTheme.typography.headlineSmall)
+                Text(
+                    when (setup.motion) {
+                        MotionMode.MANUAL -> "Tú mueves la lámina y pulsas Continuar."
+                        MotionMode.SIMULATED -> "Retardos simulados, sin equipo."
+                        MotionMode.BLE_SIM -> "Protocolo BLE contra un ESP32 simulado."
+                    },
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
         }
+        Segmented(listOf(MotionMode.MANUAL to "Manual", MotionMode.SIMULATED to "Simulado", MotionMode.BLE_SIM to "BLE sim."), setup.motion, vm::setMotion)
 
-        MicaButton(vm::start, Modifier.fillMaxWidth(), enabled = setup.source != ImageSource.CAMERA || hasCamera) {
-            Text("Iniciar sesión", style = MaterialTheme.typography.labelLarge)
+        MicaButton(vm::start, Modifier.fillMaxWidth().height(56.dp), enabled = setup.source != ImageSource.CAMERA || hasCamera) {
+            MicaIcon(MicaIcons.Play, null, tint = MaterialTheme.colorScheme.onPrimary)
+            Spacer(Modifier.size(8.dp))
+            Text("Iniciar barrido automatizado", style = MaterialTheme.typography.labelLarge)
         }
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            MicaTonalButton(onOpenCapture, Modifier.weight(1f)) { Text("Captura de un campo", style = MaterialTheme.typography.labelLarge) }
+            MicaOutlinedButton({ vm.setMotion(MotionMode.SIMULATED) }, Modifier.weight(1f)) { Text("Modo simulación", style = MaterialTheme.typography.labelLarge) }
+        }
+        Text("Movimiento motorizado por BLE real: requiere el controlador del equipo y el acuerdo de UUID con el firmware, aún pendientes.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.height(8.dp))
+    }
+}
+
+@Composable
+private fun StepChip(step: String, name: String, done: Boolean, modifier: Modifier = Modifier, muted: Boolean = false) {
+    Column(
+        modifier.clip(MaterialTheme.shapes.medium).background(if (muted) androidx.compose.ui.graphics.Color.Transparent else MaterialTheme.colorScheme.surfaceContainerLowest).padding(vertical = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            if (done) MicaIcon(MicaIcons.Check, null, tint = MaterialTheme.colorScheme.primary, size = 16.dp)
+            Text(step, style = MaterialTheme.typography.labelSmall, color = if (muted) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.primary)
+        }
+        Text(name, style = MaterialTheme.typography.titleSmall, color = if (muted) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.onSurface)
     }
 }
 
