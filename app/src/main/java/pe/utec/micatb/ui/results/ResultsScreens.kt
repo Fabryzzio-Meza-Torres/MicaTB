@@ -39,6 +39,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.contentDescription
@@ -69,6 +70,10 @@ import pe.utec.micatb.inference.countFor
 import pe.utec.micatb.inference.selectFor
 import pe.utec.micatb.ui.capture.DetectionOverlay
 import pe.utec.micatb.ui.components.HairlineDivider
+import pe.utec.micatb.ui.components.MicaCard
+import pe.utec.micatb.ui.components.MicaTonalButton
+import pe.utec.micatb.ui.components.Tag
+import pe.utec.micatb.ui.components.ReviewTag
 import pe.utec.micatb.ui.components.Legend
 import pe.utec.micatb.ui.components.MicaButton
 import pe.utec.micatb.ui.components.MicaIcon
@@ -85,9 +90,9 @@ import pe.utec.micatb.ui.theme.tabular
 /** "1 contado", "2 contados". */
 internal fun counted(n: Int) = if (n == 1) "1 contado" else "$n contados"
 
-private val dateFmt: DateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, java.util.Locale.forLanguageTag("es"))
+internal val dateFmt: DateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, java.util.Locale.forLanguageTag("es"))
 
-private fun statusText(s: SessionStatus) = when (s) {
+internal fun statusText(s: SessionStatus) = when (s) {
     SessionStatus.CREATED -> "Creada"
     SessionStatus.RUNNING -> "En curso"
     SessionStatus.PAUSED -> "En pausa"
@@ -104,21 +109,61 @@ private fun BackHeader(title: String, onBack: () -> Unit) {
     }
 }
 
-// ---------------------------------------------------------------- historial
+// ---------------------------------------------------------------- informes (historial)
 
 @Composable
 fun HistoryScreen(container: AppContainer, onOpen: (String) -> Unit, modifier: Modifier = Modifier) {
     val sessions by container.sessions.observeSummaries().collectAsStateWithLifecycle(emptyList())
-    Column(modifier.fillMaxSize()) {
-        Text("Historial", style = MaterialTheme.typography.headlineSmall, modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 12.dp))
+    var query by remember { mutableStateOf("") }
+    val shown = sessions.filter { query.isBlank() || (it.label ?: "").contains(query.trim(), ignoreCase = true) }
+    val latest = shown.firstOrNull()
+    LazyColumn(modifier.fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        item {
+            OutlinedTextField(
+                value = query, onValueChange = { query = it }, singleLine = true, modifier = Modifier.fillMaxWidth(),
+                placeholder = { Text("Buscar por código de muestra") },
+                leadingIcon = { MicaIcon(MicaIcons.Search, null, tint = MaterialTheme.colorScheme.onSurfaceVariant) },
+                shape = MaterialTheme.shapes.medium,
+            )
+        }
         if (sessions.isEmpty()) {
-            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Aún no hay sesiones", style = MaterialTheme.typography.titleMedium)
-                Text("Cuando termines una sesión de varios campos aparecerá aquí, con sus fotos originales y el conteo de cada campo.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            item {
+                Column(Modifier.padding(vertical = 24.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Aún no hay informes", style = MaterialTheme.typography.titleMedium)
+                    Text("Cuando termines una sesión de varios campos aparecerá aquí, con sus fotos originales y el conteo de cada campo.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
             }
         } else {
-            LazyColumn(Modifier.fillMaxSize()) {
-                items(sessions, key = { it.id }) { SessionRow(it, Modifier.padding(horizontal = 16.dp)) { onOpen(it.id) } }
+            if (latest != null) item { LatestReport(latest, onOpen) }
+            item {
+                Row(Modifier.fillMaxWidth().padding(top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Legend("Historial reciente", Modifier.weight(1f))
+                    Text("${shown.size} ${if (shown.size == 1) "sesión" else "sesiones"}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            items(shown, key = { it.id }) { SessionRow(it) { onOpen(it.id) } }
+        }
+    }
+}
+
+@Composable
+private fun LatestReport(s: SessionSummary, onOpen: (String) -> Unit) {
+    MicaCard {
+        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Tag(s.label ?: "SIN ID")
+                Text(dateFmt.format(Date(s.createdAt)), Modifier.weight(1f), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                ReviewTag("DEMOSTRACIÓN")
+            }
+            val positive = s.countStrict > 0
+            Text(
+                if (positive) "Con bacilos contados" else "Sin bacilos contados",
+                style = MaterialTheme.typography.headlineSmall, color = if (positive) Mica.stain.gNegative else Mica.stain.ok,
+            )
+            Text("${counted(s.countStrict)} en ${s.validFields} de ${s.fields} campos válidos · ${statusText(s.status)}", style = MaterialTheme.typography.bodyMedium.tabular, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                MicaButton({ onOpen(s.id) }, Modifier.weight(1f)) { Text("Ver informe", style = MaterialTheme.typography.labelLarge) }
+                MicaTonalButton({}, Modifier.weight(1f), enabled = false) { Text("PDF próximamente", style = MaterialTheme.typography.labelMedium) }
             }
         }
     }
@@ -126,24 +171,27 @@ fun HistoryScreen(container: AppContainer, onOpen: (String) -> Unit, modifier: M
 
 @Composable
 fun SessionRow(s: SessionSummary, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    Column(modifier.fillMaxWidth().clickable(onClick = onClick)) {
-        HairlineDivider()
-        Row(Modifier.fillMaxWidth().padding(vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(s.label ?: "Sin identificador", style = MaterialTheme.typography.titleMedium)
-                Text("${dateFmt.format(Date(s.createdAt))} · ${statusText(s.status)}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text("${s.validFields} de ${s.fields} campos válidos · ${counted(s.countStrict)}", style = MaterialTheme.typography.bodyMedium.tabular)
+    val done = s.status == SessionStatus.COMPLETED
+    MicaCard(modifier, onClick = onClick, shape = MaterialTheme.shapes.large) {
+        Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Box(Modifier.size(44.dp).clip(MaterialTheme.shapes.medium).background(MaterialTheme.colorScheme.secondaryContainer), contentAlignment = Alignment.Center) {
+                MicaIcon(if (done) MicaIcons.Check else MicaIcons.Pause, null, tint = MaterialTheme.colorScheme.primary)
             }
-            MicaIcon(MicaIcons.Chevron, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(s.label ?: "Sin identificador", style = MaterialTheme.typography.labelLarge.copy(fontFamily = pe.utec.micatb.ui.theme.JetBrainsMono), maxLines = 1)
+                Text("${dateFmt.format(Date(s.createdAt))} · ${s.validFields}/${s.fields} campos · ${counted(s.countStrict)}", style = MaterialTheme.typography.bodySmall.tabular, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+            }
+            Tag(statusText(s.status).uppercase(), container = MaterialTheme.colorScheme.secondaryContainer, content = MaterialTheme.colorScheme.onSecondaryContainer)
+            MicaIcon(MicaIcons.Chevron, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, size = 20.dp)
         }
     }
 }
 
 // ---------------------------------------------------------------- resumen de sesion
 
-private fun rule(c: AppContainer, mode: CountMode): CountingRule = if (mode == CountMode.STRICT) c.modelConfig.strict else c.modelConfig.broad
+internal fun rule(c: AppContainer, mode: CountMode): CountingRule = if (mode == CountMode.STRICT) c.modelConfig.strict else c.modelConfig.broad
 
-private fun FieldDetail.detections(): List<Detection> = inference?.let { DetectionsJson.decode(it.detectionsJson) }.orEmpty()
+internal fun FieldDetail.detections(): List<Detection> = inference?.let { DetectionsJson.decode(it.detectionsJson) }.orEmpty()
 
 @Composable
 fun SessionResultScreen(container: AppContainer, sessionId: String, onBack: () -> Unit, onOpenField: (Int) -> Unit, modifier: Modifier = Modifier) {
@@ -243,7 +291,7 @@ private val Color0 = androidx.compose.ui.graphics.Color(0xFF050606)
 
 /** Foto original del campo con las cajas de las detecciones guardadas (la foto en disco no tiene cajas). */
 @Composable
-private fun FieldImage(container: AppContainer, f: FieldDetail, rule: CountingRule, conf: Float, showBoxes: Boolean, maxSide: Int, modifier: Modifier) {
+internal fun FieldImage(container: AppContainer, f: FieldDetail, rule: CountingRule, conf: Float, showBoxes: Boolean, maxSide: Int, modifier: Modifier) {
     val capture = f.capture ?: return
     val file: File = container.sessions.photoFile(capture)
     val bmp by produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, file.path, maxSide) {

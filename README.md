@@ -46,4 +46,4 @@ Se necesita un archivo `local.properties` con `sdk.dir` (no se sube al repositor
 
 ## Licencia
 
-Ver `LICENSE`. Los datos de entrenamiento tienen su propia licencia (CC BY 4.0). La tipografía Barlow se distribuye con licencia OFL (`docs/licenses/OFL-Barlow.txt`).
+Ver `LICENSE`. Los datos de entrenamiento tienen su propia licencia (CC BY 4.0). Las tipografías Space Grotesk, Manrope y JetBrains Mono se distribuyen con licencia OFL (`docs/licenses/`).

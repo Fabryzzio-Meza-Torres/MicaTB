@@ -118,4 +118,16 @@ object MicaIcons {
     }
 
     val Info by lazy { icon("Info") { line { circle(12f, 12f, 8.5f) }; line { moveTo(12f, 11f); lineTo(12f, 16.5f); moveTo(12f, 7.7f); lineTo(12f, 7.8f) } } }
+
+    val Home by lazy {
+        icon("Home") {
+            line { moveTo(3.5f, 11f); lineTo(12f, 4f); lineTo(20.5f, 11f) }
+            line { moveTo(6f, 9.5f); lineTo(6f, 20f); lineTo(18f, 20f); lineTo(18f, 9.5f) }
+            line { moveTo(10f, 20f); lineTo(10f, 14f); lineTo(14f, 14f); lineTo(14f, 20f) }
+        }
+    }
+
+    val Search by lazy { icon("Search") { line { circle(10.5f, 10.5f, 6.5f) }; line { moveTo(15.5f, 15.5f); lineTo(20f, 20f) } } }
+
+    val Export by lazy { icon("Export") { line { moveTo(12f, 15f); lineTo(12f, 4f); moveTo(8f, 8f); lineTo(12f, 4f); lineTo(16f, 8f) }; line { moveTo(5f, 14f); lineTo(5f, 20f); lineTo(19f, 20f); lineTo(19f, 14f) } } }
 }

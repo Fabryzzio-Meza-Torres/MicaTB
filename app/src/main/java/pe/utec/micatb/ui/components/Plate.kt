@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,20 +41,20 @@ import androidx.compose.ui.unit.dp
 import pe.utec.micatb.ui.theme.Mica
 import pe.utec.micatb.ui.theme.tabular
 
-/** Aviso permanente: va en todas las pantallas y nunca se oculta. */
+/** Aviso permanente: va en todas las pantallas y nunca se oculta. Franja de lavado cian bajo la cabecera. */
 @Composable
 fun DisclaimerStrip(modelNotice: String, modifier: Modifier = Modifier) {
     Column(
         modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-            .statusBarsPadding()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .background(Mica.stain.cyanWash)
+            .border(BorderStroke(1.dp, Mica.stain.cyanBorder))
+            .padding(horizontal = 16.dp, vertical = 6.dp),
     ) {
         Text(
-            "Apoyo al tamizaje, no diagnóstico",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+            "APOYO AL TAMIZAJE, NO DIAGNÓSTICO",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.primary,
         )
         Text(
             modelNotice,

@@ -1,5 +1,6 @@
 package pe.utec.micatb.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -16,31 +17,34 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.NavType
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import pe.utec.micatb.AppContainer
 import pe.utec.micatb.ui.capture.CaptureScreen
 import pe.utec.micatb.ui.capture.CaptureViewModel
+import pe.utec.micatb.ui.components.AppHeader
 import pe.utec.micatb.ui.components.DisclaimerStrip
 import pe.utec.micatb.ui.components.MicaIcon
 import pe.utec.micatb.ui.home.HomeScreen
-import pe.utec.micatb.ui.settings.SettingsScreen
 import pe.utec.micatb.ui.results.FieldDetailScreen
+import pe.utec.micatb.ui.results.GalleryScreen
 import pe.utec.micatb.ui.results.HistoryScreen
 import pe.utec.micatb.ui.results.SessionResultScreen
 import pe.utec.micatb.ui.session.SessionScreen
+import pe.utec.micatb.ui.settings.SettingsScreen
 import pe.utec.micatb.ui.theme.MicaIcons
 
-private enum class Dest(val route: String, val label: String, val icon: ImageVector) {
-    Home("home", "Inicio", MicaIcons.Slide),
-    Capture("capture", "Captura", MicaIcons.Capture),
-    Session("session", "Sesión", MicaIcons.Session),
-    Results("results", "Resultados", MicaIcons.Results),
-    Settings("settings", "Ajustes", MicaIcons.Settings),
+/** Las 5 pestañas de Stitch. Captura suelta no tiene pestaña: se abre desde Escaneos. */
+private enum class Dest(val route: String, val label: String, val section: String, val icon: ImageVector) {
+    Home("home", "Inicio", "Inicio", MicaIcons.Home),
+    Session("session", "Escaneos", "Escaneos", MicaIcons.Capture),
+    Gallery("gallery", "Galería", "Galería", MicaIcons.Gallery),
+    Results("results", "Informes", "Informes", MicaIcons.Results),
+    Settings("settings", "Ajustes", "Ajustes / Sistema", MicaIcons.Settings),
 }
 
 @Composable
@@ -55,21 +59,34 @@ fun MicaApp(container: AppContainer) {
         restoreState = true
     }
 
+    val section = when {
+        current == null -> Dest.Home.section
+        current == "capture" -> "Captura"
+        current.startsWith("results/") -> "Informe"
+        else -> Dest.entries.firstOrNull { current == it.route }?.section ?: Dest.Home.section
+    }
+
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         contentWindowInsets = WindowInsets(0),
-        topBar = { DisclaimerStrip(container.modelConfig.displayNotice) },
+        topBar = {
+            Column {
+                AppHeader(section)
+                DisclaimerStrip(container.modelConfig.displayNotice)
+            }
+        },
         bottomBar = {
-            NavigationBar(containerColor = MaterialTheme.colorScheme.surfaceContainerLow) {
+            NavigationBar(containerColor = MaterialTheme.colorScheme.background) {
                 Dest.entries.forEach { d ->
+                    val selected = current == d.route || (d == Dest.Results && current?.startsWith("results/") == true)
                     NavigationBarItem(
-                        selected = current == d.route || (current?.startsWith(d.route + "/") == true),
+                        selected = selected,
                         onClick = { go(d.route) },
-                        icon = { MicaIcon(d.icon, null, tint = androidx.compose.ui.graphics.Color.Unspecified.let { MaterialTheme.colorScheme.onSurface }) },
+                        icon = { MicaIcon(d.icon, null, tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant) },
                         label = { Text(d.label, style = MaterialTheme.typography.labelMedium) },
                         colors = NavigationBarItemDefaults.colors(
                             indicatorColor = MaterialTheme.colorScheme.secondaryContainer,
-                            selectedTextColor = MaterialTheme.colorScheme.onSurface,
+                            selectedTextColor = MaterialTheme.colorScheme.primary,
                             unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         ),
                     )
@@ -78,12 +95,17 @@ fun MicaApp(container: AppContainer) {
         },
     ) { padding ->
         NavHost(nav, startDestination = Dest.Home.route, modifier = Modifier.padding(padding)) {
-            composable(Dest.Home.route) { HomeScreen(container, onNavigate = ::go) }
-            composable(Dest.Capture.route) {
+            composable(Dest.Home.route) { HomeScreen(container, onNavigate = ::go, onOpen = { nav.navigate("results/$it") }) }
+            composable("capture") {
                 val vm: CaptureViewModel = viewModel(factory = viewModelFactory { initializer { CaptureViewModel(container) } })
                 CaptureScreen(vm, container)
             }
-            composable(Dest.Session.route) { SessionScreen(container, onOpenResults = { nav.navigate("results/$it") }) }
+            composable(Dest.Session.route) {
+                SessionScreen(container, onOpenResults = { nav.navigate("results/$it") }, onOpenCapture = { nav.navigate("capture") })
+            }
+            composable(Dest.Gallery.route) {
+                GalleryScreen(container, onOpenField = { sid, idx -> nav.navigate("results/$sid/$idx") }, onOpenSession = { nav.navigate("results/$it") }, onNewScan = { go(Dest.Session.route) })
+            }
             composable(Dest.Results.route) { HistoryScreen(container, onOpen = { nav.navigate("results/$it") }) }
             composable("results/{sid}", listOf(navArgument("sid") { type = NavType.StringType })) { e ->
                 val sid = e.arguments!!.getString("sid")!!

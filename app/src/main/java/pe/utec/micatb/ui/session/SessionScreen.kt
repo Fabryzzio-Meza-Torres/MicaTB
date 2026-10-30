@@ -58,19 +58,19 @@ import pe.utec.micatb.ui.theme.MicaIcons
 import pe.utec.micatb.ui.theme.tabular
 
 @Composable
-fun SessionScreen(container: AppContainer, onOpenResults: (String) -> Unit, modifier: Modifier = Modifier) {
+fun SessionScreen(container: AppContainer, onOpenResults: (String) -> Unit, onOpenCapture: () -> Unit, modifier: Modifier = Modifier) {
     val vm: SessionViewModel = viewModel(factory = viewModelFactory { initializer { SessionViewModel(container) } })
     val run by vm.run.collectAsStateWithLifecycle()
     val error by vm.error.collectAsStateWithLifecycle()
     Column(modifier.fillMaxSize()) {
         error?.let { Message(it, onDismiss = vm::dismissError, modifier = Modifier.padding(16.dp)) }
         val r = run
-        if (r == null) SetupPanel(vm) else ActivePanel(vm, r, onOpenResults)
+        if (r == null) SetupPanel(vm, onOpenCapture) else ActivePanel(vm, r, onOpenResults)
     }
 }
 
 @Composable
-private fun SetupPanel(vm: SessionViewModel) {
+private fun SetupPanel(vm: SessionViewModel, onOpenCapture: () -> Unit) {
     val setup by vm.setup.collectAsStateWithLifecycle()
     val unfinished by vm.unfinished.collectAsStateWithLifecycle()
     val context = LocalContext.current
