@@ -1,6 +1,12 @@
 # Progreso
 
-Estado vivo del trabajo. Última actualización: 2026-10-24.
+Estado vivo del trabajo. Última actualización: 2026-10-30.
+
+## Rediseño Stitch (2026-10-30, rama feature/stitch-redesign)
+
+La interfaz sigue ahora los diseños de Stitch (tema claro, Space Grotesk, Manrope y JetBrains Mono, barra de 5 pestañas: Inicio, Escaneos, Galería, Informes, Ajustes). Solo cambió la capa de UI: detector, orquestador, base de datos y contrato del modelo no se tocaron. Detalle y lo que se omitió a propósito: DESIGN.md.
+
+Verificado: 58 de 58 pruebas JVM; las cinco pestañas, el detalle de informe, el detalle de campo y la captura vistos en el emulador con datos reales (conteos y cajas del modelo). Sin verificar: celular real, vista previa de cámara (negra en el emulador, como antes), orientación en pantallas pequeñas.
 
 ## Resumen
 

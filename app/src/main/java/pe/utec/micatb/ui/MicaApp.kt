@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -83,7 +84,7 @@ fun MicaApp(container: AppContainer) {
                         selected = selected,
                         onClick = { go(d.route) },
                         icon = { MicaIcon(d.icon, null, tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant) },
-                        label = { Text(d.label, style = MaterialTheme.typography.labelMedium) },
+                        label = { Text(d.label, style = MaterialTheme.typography.labelMedium.copy(fontSize = 11.sp), maxLines = 1) },
                         colors = NavigationBarItemDefaults.colors(
                             indicatorColor = MaterialTheme.colorScheme.secondaryContainer,
                             selectedTextColor = MaterialTheme.colorScheme.primary,

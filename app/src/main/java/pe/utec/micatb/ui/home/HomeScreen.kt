@@ -157,11 +157,9 @@ private fun LastScreening(s: SessionSummary?, onOpen: (String) -> Unit) {
                     Modifier.fillMaxWidth().clip(MaterialTheme.shapes.medium).background(MaterialTheme.colorScheme.surfaceContainerLow).padding(12.dp),
                     verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(s.label ?: "Sin identificador", style = MaterialTheme.typography.labelLarge.copy(fontFamily = pe.utec.micatb.ui.theme.JetBrainsMono))
-                            if (s.countStrict > 0) PositiveTag("${s.countStrict} bacilos") else CleanTag("SIN BACILOS")
-                        }
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Text(s.label ?: "Sin identificador", style = MaterialTheme.typography.labelLarge.copy(fontFamily = pe.utec.micatb.ui.theme.JetBrainsMono), maxLines = 1)
+                        if (s.countStrict > 0) PositiveTag("${s.countStrict} BACILOS") else CleanTag("SIN BACILOS")
                         Text("${s.validFields} de ${s.fields} campos válidos", style = MaterialTheme.typography.bodySmall.tabular, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     MicaTonalButton({ onOpen(s.id) }) { Text("Detalles", style = MaterialTheme.typography.labelMedium) }

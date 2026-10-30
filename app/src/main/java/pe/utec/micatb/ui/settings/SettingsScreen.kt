@@ -70,7 +70,7 @@ fun SettingsScreen(container: AppContainer, modifier: Modifier = Modifier) {
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Configuración del sistema", Modifier.weight(1f), style = MaterialTheme.typography.headlineMedium)
+                Text("Configuración del sistema", Modifier.weight(1f), style = MaterialTheme.typography.headlineSmall)
                 Tag("REV 0.1.0", container = MaterialTheme.colorScheme.secondaryContainer, content = MaterialTheme.colorScheme.onSecondaryContainer)
             }
             Text("Modelo de visión, calidad de imagen y almacenamiento sin conexión.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)

@@ -2,76 +2,63 @@
 
 Documento del mundo visual tal como quedó construido (app/src/main/java/pe/utec/micatb/ui/theme y ui/components). Lo que dice PRODUCT.md manda sobre esto.
 
-## Mundo: lámina de micrografía
+## Origen: Stitch "Clinical Diagnostic Precision"
 
-El campo microscópico es una lámina de figura: la imagen manda, y cada número cuelga de ella con una llamada numerada y una leyenda. La interfaz es neutra (hueso sobre negro mate de lámina) y el color se reserva para los datos, con los pigmentos de la tinción Gram: safranina para Gram negativo y violeta cristal para Gram positivo.
+Desde 2026-10-30 la interfaz sigue los diseños de Stitch (carpeta stitch_micatb_ai_microscopy_assistant): instrumento médico claro e higiénico, teal clínico como acción, rojo reservado a los bacilos detectados. Reemplaza al mundo anterior "lámina de micrografía" (oscuro, Barlow). Decisión: piel visual fiel a Stitch y datos reales de la app; lo que Stitch muestra y la app no puede respaldar se omite o se rotula como demostración.
 
-Escena que decide el tema: un cuarto con poca luz, el celular en vertical sobre el ocular, guantes. Por eso el esquema oscuro es el principal; el claro ("hoja de contacto", hueso con tinta) existe para revisar resultados con luz ambiente y sigue el ajuste del sistema.
+## Color (tema claro único)
 
-Dirección elegida por el usuario sobre la asignada por el sorteo; alternativas descartadas: registro de exposición de cuarto oscuro, edición de margen ancho, mosaico denso japonés y el estándar Material 3 clínico.
+| Rol | Valor |
+|---|---|
+| Fondo y superficie | #F7F9FF |
+| Tarjeta | #FFFFFF con filete #E2E8F0 |
+| Contenedores | #EDF4FF, #E3EFFF, #D8EAFF |
+| Texto | #001D32 (secundario #3D4949) |
+| Acción primaria | teal #006768 |
+| Chips y estados suaves | #C7DFFF |
+| Lavado cian (aviso, modelo) | #E8F7F7, filete #CCECEC |
+| Bacilo detectado | #EF4444, lavado #FEE2E2, texto #991B1B |
+| Revisión / advertencia | texto #92400E, lavado #FEF3C7 |
+| Correcto | texto #047857, lavado #D1FAE5 |
 
-## Color
-
-| Rol | Oscuro | Claro |
-|---|---|---|
-| Fondo y superficie | #0E0F10 | #EDE8DB |
-| Texto | #DDD8CB | #14161A |
-| Texto secundario | #A7A398 | #4A4C50 |
-| Acción primaria | hueso #E8E3D6 sobre #0E0F10 | tinta #14161A sobre #EDE8DB |
-| Filete | #34383C | #BDB7A8 |
-| Gram negativo (datos) | #E5589A, suave #F2A3C6 | #B0206A, suave #D27AA6 |
-| Gram positivo (datos) | #9F82F0, suave #C6B6F7 | #6445C4, suave #9C86DE |
-| Advertencia | #E2B33F | #8A6200 |
-| Correcto | #8FC4A2 | #2F7A4B |
-| Error | #F2735C | #B3261E |
-
-Reglas: el color de acción nunca es un color de datos; la safranina solo aparece en cajas, llamadas y glifos de clase. Una clase nunca se distingue solo por color: la forma dice la morfología (rectángulo = bacilo, elipse = coco), el trazo dice el Gram (continuo = negativo, discontinuo = positivo) y el color lo refuerza. Los estados usan icono y texto además del color.
+Reglas: el rojo solo marca bacilos contados y sus cajas. Una clase nunca se distingue solo por color: la forma dice la morfología (rectángulo = bacilo, elipse = coco), el trazo dice el Gram (continuo = negativo, discontinuo = positivo). Los estados llevan texto además del color. El tema oscuro se retiró; si hace falta para el cuarto oscuro, se añade aparte.
 
 ## Tipografía
 
-Barlow (licencia OFL, incluida en la app para funcionar sin red) en Regular, Medium y SemiBold, y Barlow Condensed Medium para rótulos de instrumento en mayúsculas. Una sola familia para titulares, cuerpo, botones y datos; escala de pasos cortos (Operate), nada por debajo de 12 sp y los datos en 15 sp o más. Conteos, umbrales, tiempos y huellas usan cifras tabulares para que no bailen al cambiar.
-
-| Rol | Tamaño | Uso |
-|---|---|---|
-| displaySmall | 36 sp SemiBold | conteo de un campo |
-| headlineMedium / Small | 28 / 24 sp SemiBold | título de pantalla |
-| titleLarge / Medium / Small | 22 / 17 / 15 sp Medium | secciones y filas |
-| bodyLarge / Medium / Small | 17 / 15 / 13 sp | texto |
-| labelLarge | 16 sp SemiBold | botones |
-| labelMedium | 14 sp Medium | etiquetas de navegación |
-| labelSmall | 12 sp Barlow Condensed, 0,9 sp de tracking | rótulos de sección en mayúsculas |
+Fuentes variables OFL incluidas en la app (funciona sin red): Space Grotesk para titulares y cifras de conteo, Manrope para contenido y botones, JetBrains Mono para identificadores, rótulos y telemetría. Cifras tabulares en conteos, umbrales y tiempos. Licencias en docs/licenses.
 
 ## Forma, elevación y movimiento
 
-Esquinas pequeñas (2, 4, 6, 8 y 12 dp); los botones y selectores usan la forma de 4 dp, no la píldora por defecto. Sin sombras: la jerarquía sale de capas tonales y filetes de 1 dp. Movimiento solo para comunicar estado (anillo de enfoque, barra de progreso); nada decorativo ni coreografía de entrada.
+Radios de 2, 4 (etiquetas), 8 (botones, contenedores) y 12 dp (tarjetas). Sin sombras fuertes: la jerarquía sale de capas tonales y filetes de 1 dp. Movimiento solo para comunicar estado.
 
 ## Componentes (ui/components)
 
-- DisclaimerStrip: aviso permanente "Apoyo al tamizaje, no diagnóstico" y el aviso del modelo activo (viene de model_config.json). Nunca se oculta.
-- PlateFrame: marco de lámina, negro con un filete fino.
-- Legend y Reading: rótulo condensado en mayúsculas y par rótulo-valor con cifras tabulares.
-- ShutterButton: único control primario de la captura; anillo con núcleo, 80 dp.
-- SideAction, MicaButton, MicaOutlinedButton, Segmented: área táctil de 48 a 56 dp.
-- ClassGlyph y DetectionOverlay: glifos y cajas de clase, con llamadas numeradas solo en lo contado; lo no contado queda como filete tenue.
-- CameraPreviewView: vista previa con enfoque táctil que se mantiene.
-- MicaIcons: iconos propios con trazo único de 1,75 en cuadrícula de 24.
+- AppHeader: logo, "MicaTB", sección en mono y el chip "100 % offline" (estado real: la app no tiene Internet).
+- DisclaimerStrip: franja cian bajo la cabecera, siempre visible: "Apoyo al tamizaje, no diagnóstico" y el aviso del modelo activo (viene de model_config.json).
+- MicaCard, MetricBox, Tag, PositiveTag, ReviewTag, CleanTag, StatusChip, LogoMark.
+- MicaButton (teal), MicaOutlinedButton (blanco con filete), MicaTonalButton (azul claro), Segmented.
+- PlateFrame, ClassGlyph, DetectionOverlay, CameraPreviewView, ShutterButton: se conservan.
+- MicaIcons: iconos propios de trazo único.
 
 ## Pantallas
 
-Navegación Material (barra inferior de 5 destinos), edge-to-edge con insets, orientación vertical fija.
+Barra inferior de 5 pestañas: Inicio, Escaneos, Galería, Informes, Ajustes. La captura de un campo suelto no tiene pestaña: se abre desde Escaneos y desde Inicio.
 
-1. Inicio: acciones, últimas sesiones, aviso de sesión sin terminar y modelo activo con su huella.
-2. Captura: campo, leyenda de conteo con umbral, estricto o amplio, calidad de imagen y tiempos por etapa.
-3. Sesión: configuración, progreso con indicación al operador, pausa con problema, cancelación con confirmación y resumen.
-4. Resultados: historial, resumen con gradación de demostración, galería con cajas y detalle de campo con la foto original.
-5. Ajustes técnicos: modelo y variante, benchmark, calibración de calidad, escala del campo y privacidad.
+1. Inicio: modelo activo, tarjeta de escaneo, métricas del día calculadas de las sesiones guardadas, último tamizaje.
+2. Escaneos (Centro de escaneo): pasos Muestra, Enfoque y Barrido, identificador, cámara o muestras, número de campos, movimiento, iniciar barrido. En ejecución conserva progreso, pausa y cancelación.
+3. Galería: última sesión, matriz de rastreo, filtros (todos, con bacilos, sin hallazgos, por revisar) y tarjetas de campo con cajas.
+4. Informes: búsqueda, última sesión y historial. El PDF aparece deshabilitado ("próximamente").
+5. Ajustes: tarjetas de motor de IA, rendimiento, calidad de imagen, escala del campo y operación sin conexión.
+
+## Qué de Stitch se omitió a propósito
+
+- Sincronización en la nube y servidor MINSA: la app no tiene permiso de Internet.
+- Sello "MINSA / OMS Validado", nombre y CMP del microscopista: no hay validación ni datos de personas.
+- Resultados BAAR y Ziehl-Neelsen: el modelo es de bacilos Gram negativos (E. coli).
+- Cifrado AES-256 de la base de datos: no existe, no se afirma.
+- PDF, compartir, imprimir y selección múltiple para exportar: no implementados.
+- Motor de platina "Calibrado" y datos del ESP32: el transporte BLE real sigue pendiente.
 
 ## Texto
 
-Español, directo, sin tecnicismos innecesarios; los controles nombran su acción y los errores dicen qué pasó y qué hacer. Lo que es demostración se rotula como tal (gradación, modelo de E. coli) y lo que no se midió no se afirma: sin calibración de microscopio no hay barra de escala ni se presentan umbrales de calidad como calibrados.
-
-## No se hizo, a propósito
-
-- Barra de escala sin dato de calibración (se activa al introducir el ancho del campo en Ajustes).
-- Cifras de latencia: las del emulador no valen como latencia de celular.
-- Capturas de pantalla de referencia de un celular real: ninguna disponible todavía.
+Español, directo; los controles nombran su acción y los errores dicen qué pasó y qué hacer. Lo que es demostración se rotula como tal (gradación, modelo de E. coli) y lo que no se midió no se afirma.
